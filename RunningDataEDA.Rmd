@@ -47,6 +47,8 @@ jessica_sf <- "C:\\Users\\jeske\\Desktop\\capstone\\data\\shp_plan_generl_lnduse
 
 serene_sf <- "C:\\Users\\serenelee\\Capstone\\shp_plan_generl_lnduse_historical\\GeneralizedLandUseHistorical.shp"
 
+ann_sf <- "C:\\Users\\amuud\\OneDrive\\Desktop\\land use data\\GeneralizedLandUseHistorical.shp"
+
 #can call in console
 #land_use <- read_land_use(jessica_sf)
 ```
