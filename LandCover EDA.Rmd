@@ -14,5 +14,7 @@ library(rgdal)
 
 ```{r}
 LandCover <- raster("C:\\Users\\amuud\\OneDrive\\Desktop\\capstone data\\tcma_lc_finalv1.tif")
+
+plot(LandCover)
 ```
 
