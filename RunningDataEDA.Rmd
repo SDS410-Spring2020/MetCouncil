@@ -51,5 +51,12 @@ land_use <- read_land_use(jessica_sf)
 serene_sf <- "/Users/serenelee/Capstone/shp_plan_generl_lnduse_historical/GeneralizedLandUseHistorical.shp"
 land_use <- read_land_use(serene_sf)
 
+<<<<<<< HEAD
+=======
+ann_sf <- "C:\\Users\\amuud\\OneDrive\\Desktop\\land use data\\GeneralizedLandUseHistorical.shp"
+
+#can call in console
+#land_use <- read_land_use(jessica_sf)
+>>>>>>> e4e3937f050503b50f4eb26a17e6578a16e60ab7
 ```
 
