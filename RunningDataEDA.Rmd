@@ -42,10 +42,13 @@ read_land_use <- function(directory){
   return(st_read(directory))
 }
 
-#our respective directories
+#Jessica respective directories
 jessica_sf <- "C:\\Users\\jeske\\Desktop\\capstone\\data\\shp_plan_generl_lnduse_historical\\GeneralizedLandUseHistorical.shp"
 
-serene_sf <- "C:\\Users\\serenelee\\Capstone\\shp_plan_generl_lnduse_historical\\GeneralizedLandUseHistorical.shp"
+#Ann
+
+#Serene
+serene_sf <- "/Users/serenelee/Capstone/shp_plan_generl_lnduse_historical/GeneralizedLandUseHistorical.shp"
 
 #can call in console
 #land_use <- read_land_use(jessica_sf)
