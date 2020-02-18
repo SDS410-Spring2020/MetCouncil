@@ -23,6 +23,7 @@ read_land_cover <- function(directory){
 #our respective directories
 jessica_tif <- "C:\\Users\\jeske\\Desktop\\capstone\\data\\tcma_classnames_updated\\TCMA_ClassNames_Updated\\tcma_lc_finalv1.tif"
 ann_tif <- "C:\\Users\\amuud\\OneDrive\\Desktop\\capstone data\\tcma_lc_finalv1.tif"
+Serene_tif <- "C:\\Users\\serenelee\\Capstone\\TCMA_ClassNames_Updated\\tcma_lc_finalv1.tif"
 
 #can call in console
 #land_cover <- read_land_cover(jessica_url)
