@@ -1,0 +1,47 @@
+---
+title: "LandCover EDA"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(raster)
+library(sp)
+library(rgdal)
+library(sf)
+library(ggplot2)
+```
+
+
+```{r}
+#function for reading land cover data
+read_land_cover <- function(directory){
+  return(raster(directory))
+}
+
+#our respective directories
+jessica_tif <- "C:\\Users\\jeske\\Desktop\\capstone\\data\\tcma_classnames_updated\\TCMA_ClassNames_Updated\\tcma_lc_finalv1.tif"
+ann_tif <- "C:\\Users\\amuud\\OneDrive\\Desktop\\capstone data\\tcma_lc_finalv1.tif"
+serene_tif <- "C:\\Users\\serenelee\\Capstone\\TCMA_ClassNames_Updated\\tcma_lc_finalv1.tif"
+
+#can call in console
+#land_cover <- read_land_cover(jessica_url)
+```
+
+
+```{r}
+#function for reading land use data
+read_land_use <- function(directory){
+  return(st_read(directory))
+}
+
+#our respective directories
+jessica_sf <- "C:\\Users\\jeske\\Desktop\\capstone\\data\\shp_plan_generl_lnduse_historical\\GeneralizedLandUseHistorical.shp"
+
+serene_sf <- "C:\\Users\\serenelee\\Capstone\\shp_plan_generl_lnduse_historical\\GeneralizedLandUseHistorical.shp"
+
+#can call in console
+#land_use <- read_land_use(jessica_sf)
+```
+
