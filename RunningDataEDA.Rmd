@@ -28,7 +28,7 @@ land_cover <- read_land_cover(jessica_tif)
 ann_tif <- "C:\\Users\\amuud\\OneDrive\\Desktop\\capstone data\\tcma_lc_finalv1.tif"
 
 #Serene
-serene_tif <- "~./Users/serenelee/Capstone/TCMA_ClassNames_Updated"
+serene_tif <- "/Users/serenelee/Capstone/TCMA_ClassNames_Updated/tcma_lc_finalv1.tif"
 land_cover <- read_land_cover(serene_tif)
 
 #Julia
