@@ -1,0 +1,24 @@
+---
+title: "Analysis"
+author: "Bouzaher, Julia"
+date: "March 9, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#Flowchart Step 5: Estimate percent forested areas within land use filtered in Step 2
+library(data.table)
+green_filtered_data <- data.table::fread("Export_Output.txt")
+
+```
+
+
+```{r}
+#Flowchart Step 6: Estimate percent forested areas within green land use filtered in Step 2
+
+
+```
