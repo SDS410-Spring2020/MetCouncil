@@ -12,9 +12,40 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 #Flowchart Step 5: Estimate percent forested areas within land use filtered in Step 2
 library(data.table)
-green_filtered_data <- data.table::fread("Export_Output.txt")
+library(sf)
+library(sp)
+library(raster)
+library(dplyr)
+library(rgdal)
+library(rgeos)
 
-```
+
+landuse_filtered <- data.table::fread("data/derived/Export_Output.txt")
+landuse <- read_sf(dsn = "data/source", layer = "GeneralizedLandUse2016")
+landcover <- raster::raster("data/source/landcover/tcma_lc_finalv1.tif")
+#12 columns would be landcover
+
+plot(landcover)
+
+options(stringsAsFactors=FALSE)
+
+#trying to crop file
+e <- extent(520000, 521239.5, 5024218, 5029162)
+crs(e) <- crs(landcover)
+cropped <- raster::crop(landcover,e)
+df <- raster::rasterToPoints(cropped)
+
+plot(cropped)
+df2 <- (df)
+levels(landcover)
+
+#trying to split file
+library(SpaDES)
+#needs to be edited - will crash computer and fill up C:: drive
+#SpaDES.tools::splitRaster(landcover, 3, 3, c(0.5, 0.5))
+  
+
+```  
 
 
 ```{r}

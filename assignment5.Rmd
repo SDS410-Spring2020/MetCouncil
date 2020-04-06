@@ -1,0 +1,198 @@
+---
+title: "Assignment_%"
+author: "Bouzaher, Julia"
+date: "April 1, 2020"
+output: html_document
+---
+
+Holt's Method: Variable 2 (nonseasonal)
+```{r}
+library(tidyverse)
+library(readxl)
+library(stats)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+
+data <- read_excel("C:/Users/Julia/Desktop/data.xlsx") 
+
+data <- data %>% 
+  dplyr::rename(year = Years) %>% dplyr::rename(month = Months)
+
+var1 <- data[,c(1,2)]
+var2 <- data[,c(3,4)]
+var2 <- var2 %>% as.data.frame() %>% filter(year != 0)
+  
+var2[var2 == 0] <- 258757950
+sum(is.na(var2))
+
+var1$dcosts[39:42] <- 25
+
+var1$dcosts = as.numeric(var1$dcosts)
+
+sum(is.na(var2) == TRUE)
+
+#plots
+options(scipen=10000)
+ggplot(var2, aes(year, fincome)) +
+  geom_line() + 
+  ggtitle("Variable 2 Nonseasonal Time Series")
+
+ggplot(var1, aes(month, dcosts)) +
+  geom_line() + 
+  ggtitle("Variable 1 Seasonal Time Series")
+
+```
+
+
+```{r}
+#model fit
+#Variable 2: total 59, post sample 8, witin sample 51
+                                                 
+var2_ws <- var2 %>% head(51) 
+var2_ps <- var2 %>% tail(8) 
+
+var2_ws_ts <- ts(var2_ws$fincome, frequency = 12)
+
+var2_Holt <- HoltWinters(var2_ws_ts, gamma = FALSE) 
+var2_Holt
+
+var2_Winters <- HoltWinters(var2_ws_ts, seasonal = "mult") 
+var2_Winters
+
+#within sample
+
+var2_ws_Holt_RMSE <- sqrt(var2_Holt$SSE/length(var2_ws))
+var2_ws_Holt_RMSE
+
+var2_ws_Winters_RMSE <- sqrt(var2_Winters$SSE/length(var2_ws)) 
+var2_ws_Winters_RMSE 
+
+
+## [1] 2.800704 To simulate a one-step naive no-change model, I will take the error produced from matching the observations 2 to 456 of the DA_LMP time series with observations 1 to 455 of the same series. 
+
+var2_ws_nnc_error <- var2_ws$fincome[2:51] - var2_ws$fincome[1:50] 
+var2_ws_nnc_error
+var2_ws_nnc_RMSE <- sqrt(mean((var2_ws_nnc_error)^2))
+var2_ws_nnc_RMSE 
+
+## [1] 3.892913 We can finally create our Theil’s U error metrics for the within-sample forecasts. 
+var2_ws_Holt_U <- var2_ws_Holt_RMSE/var2_ws_nnc_RMSE 
+var2_ws_Winters_U <- var2_ws_Winters_RMSE/var2_ws_nnc_RMSE 
+var2_ws_Holt_U 
+var2_ws_Winters_U 
+
+#post sample
+
+#is n.ahead supposed to be 48?
+var2_ps_Holt_pred <- predict(var2_Holt, n.ahead = 48) 
+var2_ps_Holt_RMSE <- sqrt(mean((var2_ps_Holt_pred - var2_ps$fincome)^2)) 
+var2_ps_Holt_RMSE 
+
+var2_ps_Winters_pred <- predict(var2_Winters, n.ahead = 48) 
+var2_ps_Winters_RMSE <- sqrt(mean((var2_ps_Winters_pred - var2_ps$fincome)^2)) 
+var2_ps_Winters_RMSE
+
+var2_ps_nnc_error <- var2_ps$fincome - var2$fincome[51:59] 
+var2_ps_nnc_error
+
+var2_ps_nnc_RMSE <- sqrt(mean((var2_ps_nnc_error)^2)) 
+var2_ps_nnc_RMSE 
+
+var2_ps_Holt_U <- var2_ps_Holt_RMSE/var2_ps_nnc_RMSE 
+var2_ps_Winters_U <- var2_ps_Winters_RMSE/var2_ps_nnc_RMSE 
+
+var2_ps_Holt_U  
+var2_ps_Winters_U  
+var2_ws_Holt_U 
+var2_ws_Winters_U 
+
+```
+
+
+Holt-Winter's Method: Variable 1 (Seasonal)
+var
+```{r}
+#model fit
+#Variable 1: total 95, within 77, post 18
+                                                 
+var1_ws <- var1 %>% head(77) 
+var1_ps <- var1 %>% tail(18) 
+
+var1_ws_ts <- ts(var1_ws$dcosts, frequency = 12)
+
+var1_Holt <- HoltWinters(var1_ws_ts, gamma = FALSE) 
+var1_Holt
+
+var1_Winters <- HoltWinters(var1_ws_ts, seasonal = "mult") 
+var1_Winters
+
+#within sample
+
+var1_ws_Holt_RMSE <- sqrt(var1_Holt$SSE/length(var1_ws))
+var1_ws_Holt_RMSE
+
+var1_ws_Winters_RMSE <- sqrt(var1_Winters$SSE/length(var1_ws)) 
+var1_ws_Winters_RMSE 
+
+
+## [1] 2.800704 To simulate a one-step naive no-change model, I will take the error produced from matching the observations 2 to 456 of the DA_LMP time series with observations 1 to 455 of the same series. 
+
+var1_ws_nnc_error <- var1_ws$dcosts[2:77] - var1_ws$dcosts[1:76] 
+var1_ws_nnc_error
+var1_ws_nnc_RMSE <- sqrt(mean((var1_ws_nnc_error)^2))
+var1_ws_nnc_RMSE 
+
+## [1] 3.892913 We can finally create our Theil’s U error metrics for the within-sample forecasts. 
+var1_ws_Holt_U <- var1_ws_Holt_RMSE/var1_ws_nnc_RMSE 
+var1_ws_Winters_U <- var1_ws_Winters_RMSE/var1_ws_nnc_RMSE 
+var1_ws_Holt_U 
+var1_ws_Winters_U 
+
+#post sample
+
+#is n.ahead supposed to be 48?
+var1_ps_Holt_pred <- predict(var1_Holt, n.ahead = 48) 
+var1_ps_Holt_RMSE <- sqrt(mean((var1_ps_Holt_pred - var1_ps$dcosts)^2)) 
+var1_ps_Holt_RMSE 
+
+var1_ps_Winters_pred <- predict(var1_Winters, n.ahead = 48) 
+var1_ps_Winters_RMSE <- sqrt(mean((var1_ps_Winters_pred - var1_ps$dcosts)^2)) 
+var1_ps_Winters_RMSE
+
+var1_ps_nnc_error <- var1_ps$dcosts - var1$dcosts[77:95] 
+var1_ps_nnc_error
+
+var1_ps_nnc_RMSE <- sqrt(mean((var1_ps_nnc_error)^2)) 
+var1_ps_nnc_RMSE 
+
+var1_ps_Holt_U <- var1_ps_Holt_RMSE/var1_ps_nnc_RMSE 
+var1_ps_Winters_U <- var1_ps_Winters_RMSE/var1_ps_nnc_RMSE 
+
+
+##table data
+var1_ps_Holt_RMSE 
+var1_ps_Holt_U  
+var1_ps_Winters_RMSE 
+var1_ps_Winters_U 
+
+var1_ws_Holt_RMSE
+var1_ws_Holt_U 
+var1_ws_Winters_RMSE
+var1_ws_Winters_U 
+
+##variable 2
+var2_ps_Holt_RMSE 
+var2_ps_Holt_U  
+var2_ps_Winters_RMSE 
+var2_ps_Winters_U 
+
+var2_ws_Holt_RMSE
+var2_ws_Holt_U 
+var2_ws_Winters_RMSE
+var2_ws_Winters_U 
+
+
+
+
+```
