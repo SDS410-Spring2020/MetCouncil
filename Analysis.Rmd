@@ -43,9 +43,15 @@ levels(landcover)
 #trying to split file
 library(SpaDES)
 #needs to be edited - will crash computer and fill up C:: drive
-#SpaDES.tools::splitRaster(landcover, 3, 3, c(0.5, 0.5))
-  
+SpaDES.tools::splitRaster(landcover,
+  nx = 3,
+  ny = 3,
+  buffer = c(0, 0),
+  path = "~data/source/landcover",
+  rType = "FLT4S")
 
+getwd()
+gc()
 ```  
 
 
