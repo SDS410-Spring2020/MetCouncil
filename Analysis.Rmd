@@ -22,7 +22,8 @@ library(rgeos)
 
 landuse_filtered <- data.table::fread("data/derived/Export_Output.txt")
 landuse <- read_sf(dsn = "data/source", layer = "GeneralizedLandUse2016")
-landcover <- raster::raster("data/source/landcover/tcma_lc_finalv1.tif")
+landcover <- raster::raster("data/source/landcover/tcma_lc_finalv1.tif") #Julias load
+landcover <- raster::raster("/Users/serenelee/Capstone/TCMA_ClassNames_Updated/tcma_lc_finalv1.tif")#Serene
 #12 columns would be landcover
 
 plot(landcover)
