@@ -18,6 +18,7 @@ library(raster)
 library(dplyr)
 library(rgdal)
 library(rgeos)
+#investigate ArcMap: library(arcmap)
 
 
 landuse_filtered <- data.table::fread("data/derived/Export_Output.txt")
@@ -30,25 +31,43 @@ plot(landcover)
 
 options(stringsAsFactors=FALSE)
 
-#trying to crop file
-e <- extent(520000, 521239.5, 5024218, 5029162)
-crs(e) <- crs(landcover)
-cropped <- raster::crop(landcover,e)
-df <- raster::rasterToPoints(cropped)
+#filtering the raster while still in raster format
+#R package for Arcmap that can filter raster?
+class(landcover@data)
+data <- landcover@data
+dplyr::filter()
 
+#Jessica might try on desktop computer to directly get dataframe:
+rasterdata <- raster::as.data.frame(landcover)
+
+
+#trying to crop file
+#somethingtocheck bounds(landcover)
+#(xmin, xmax, ymin, ymax)
+#490,000... 520,000,...521,000
+e <- extent(520000, 521239.5, 5024218, 5029162)
+#keep the projection systems constant crs(e) <- crs(landcover)
+cropped <- raster::crop(landcover,e)
 plot(cropped)
-df2 <- (df)
+
+#trying to check categories of file
 levels(landcover)
 
 #trying to split file
 library(SpaDES)
 #needs to be edited - will crash computer and fill up C:: drive
-SpaDES.tools::splitRaster(landcover,
+o <- SpaDES.tools::splitRaster(landcover,
   nx = 3,
   ny = 3,
-  buffer = c(0, 0),
+ # buffer = c(0.5, 0.5),
   path = "~data/source/landcover",
   rType = "FLT4S")
+
+## transforming to dataframe
+df <- raster::rasterToPoints(cropped)
+raster::as.data.frame()
+
+landcover <- raster::raster("~data/source/landcover/tcma_lc_finalv1.tif") #Julias load
 
 getwd()
 gc()
