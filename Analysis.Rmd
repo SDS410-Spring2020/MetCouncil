@@ -23,11 +23,11 @@ library(rgeos)
 
 landuse_filtered <- data.table::fread("data/derived/Export_Output.txt")
 landuse <- read_sf(dsn = "data/source", layer = "GeneralizedLandUse2016")
-landcover <- raster::raster("data/source/landcover/tcma_lc_finalv1.tif") #Julias load
-landcover <- raster::raster("/Users/serenelee/Capstone/TCMA_ClassNames_Updated/tcma_lc_finalv1.tif")#Serene
+landcover <- raster::raster("data/source/landcover/tcma_lc_finalv1.tif", RAT = TRUE) #Julias load
+#landcover <- raster::raster("/Users/serenelee/Capstone/TCMA_ClassNames_Updated/tcma_lc_finalv1.tif")#Serene
 #12 columns would be landcover
 
-plot(landcover)
+plot(landcover, axes = TRUE)
 
 options(stringsAsFactors=FALSE)
 
@@ -45,32 +45,38 @@ rasterdata <- raster::as.data.frame(landcover)
 #somethingtocheck bounds(landcover)
 #(xmin, xmax, ymin, ymax)
 #490,000... 520,000,...521,000
-e <- extent(520000, 521239.5, 5024218, 5029162)
-#keep the projection systems constant crs(e) <- crs(landcover)
-cropped <- raster::crop(landcover,e)
-plot(cropped)
-
-#trying to check categories of file
-levels(landcover)
-
-#trying to split file
-library(SpaDES)
-#needs to be edited - will crash computer and fill up C:: drive
-o <- SpaDES.tools::splitRaster(landcover,
-  nx = 3,
-  ny = 3,
- # buffer = c(0.5, 0.5),
-  path = "~data/source/landcover",
-  rType = "FLT4S")
+extent(landcover)
+e <- as(extent(460000, 465000, 4980000, 4990000), 'SpatialPolygons')
+crs(landcover)
+crs(e) <- "+proj=utm +zone=15 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+crs(e)
+cropped2 <- raster::crop(landcover,e)
+plot(cropped2, axes = TRUE)
 
 ## transforming to dataframe
-df <- raster::rasterToPoints(cropped)
-raster::as.data.frame()
+df <- raster::rasterToPoints(cropped2)
+df <- as.data.frame(df)
 
-landcover <- raster::raster("~data/source/landcover/tcma_lc_finalv1.tif") #Julias load
+df2 <- raster::as.data.frame(cropped2, xy = TRUE)
+
+
+#alternate method
+# library(foreign)
+# rat <- foreign::read.dbf("data/source/landcover/tcma_lc_finalv1.vat.dbf")
 
 getwd()
 gc()
+
+# 
+# #trying to split file
+# library(SpaDES)
+# #needs to be edited - will crash computer and fill up C:: drive
+# o <- SpaDES.tools::splitRaster(landcover,
+#   nx = 3,
+#   ny = 3,
+#  # buffer = c(0.5, 0.5),
+#   path = "~data/source/landcover",
+#   rType = "FLT4S")
 ```  
 
 
