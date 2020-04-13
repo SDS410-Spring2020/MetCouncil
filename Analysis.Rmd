@@ -54,18 +54,24 @@ cropped2 <- raster::crop(landcover,e)
 plot(cropped2, axes = TRUE)
 
 ## transforming to dataframe
-df <- raster::rasterToPoints(cropped2)
-df <- as.data.frame(df)
+#df <- raster::rasterToPoints(cropped2)
+#df <- as.data.frame(df)
 
+#transforming to dataframe directly
 df2 <- raster::as.data.frame(cropped2, xy = TRUE)
 
+#checking that the third column values are 1-11
+min(df$tcma_lc_finalv1)
+max(df$tcma_lc_finalv1)
 
+
+
+
+
+###----------------------------------- not currently in use
 #alternate method
 # library(foreign)
 # rat <- foreign::read.dbf("data/source/landcover/tcma_lc_finalv1.vat.dbf")
-
-getwd()
-gc()
 
 # 
 # #trying to split file
