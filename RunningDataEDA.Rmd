@@ -12,6 +12,7 @@ library(rgdal)
 library(sf)
 library(ggplot2)
 library(dplyr)
+library(reshape2)
 ```
 
 
@@ -22,8 +23,10 @@ read_land_cover <- function(directory){
 }
 
 #Jessica
-jessica_tif <- "C:\\Users\\jeske\\Desktop\\capstone\\data\\tcma_classnames_updated\\TCMA_ClassNames_Updated\\tcma_lc_finalv1.tif"
+jessica_tif <- "C:\\Users\\jeske\\Desktop\\capstone\\data\\tcma_classnames_updated\\TCMA_ClassNames_Updated\\tcma_lc_finalv1.tif.tif"
 land_cover <- read_land_cover(jessica_tif)
+
+getwd()
 
 # Ann
 ann_tif <- "C:\\Users\\amuud\\OneDrive\\Desktop\\capstone data\\tcma_lc_finalv1.tif"
@@ -65,3 +68,36 @@ potential_forest <- land_use %>%
 
 ```
 
+```{r}
+landuse_percentages <- landuse_filtered %>% 
+  rename(type = DSCRPT2016, `NA` = VALUE_0, `Grass/Shrub` = VALUE_1, `Bare Soil` = VALUE_2, Buildings= VALUE_3, `Roads/Paved Surfaces` = VALUE_4, `Lakes/Ponds` = VALUE_5, `Deciduous Tree Canopy` = VALUE_6, `Coniferous Tree Canopy` = VALUE_7, Agriculture = VALUE_8, `Emergent Wetland` = VALUE_9, `Forested/Shrub Wetland` = VALUE_10, River = VALUE_11, Extraction = VALUE_12) %>% 
+  melt(id.vars = c("type", "OBJECTID")) %>% 
+  mutate(percent = case_when(
+    type == "Park, Recreational, or Preserve" ~ (value/747410768)*100,
+    type == "Undeveloped" ~ (value/1702916156)*100
+  ))
+
+#to get sums per type:
+
+# landuse_percentages %>% 
+#   group_by(type) %>% 
+#   summarize(sum(value))
+
+#total park etc: 747410768
+#total undeveloped: 1702916156
+
+
+colnames(landuse_filtered)
+```
+"1" = "Grass/Shrub",
+                       "2" = "Bare Soil",
+                       "3" = "Buildings",
+                       "4" = "Roads/Paved Surfaces",
+                       "5" = "Lakes/Ponds",
+                       "6" = "Deciduous Tree Canopy",
+                       "7" = "Coniferous Tree Canopy",
+                       "8" = "Agriculture",
+                       "9" = "Emergent Wetland",
+                       "10" = "Forested/Shrub Wetland",
+                       "11" = "River",
+                       "12" = "Extraction"))
