@@ -1,0 +1,65 @@
+---
+title: "Units-EDA"
+author: "Bouzaher, Julia"
+date: "April 16, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = FALSE, warning = FALSE)
+```
+
+Loading packages and data
+```{r, include=FALSE}
+library(data.table)
+library(sf)
+library(sp)
+library(raster)
+library(dplyr)
+library(rgdal)
+library(rgeos)
+
+landuse_filtered <- data.table::fread("data/derived/Export_Output.txt")
+landuse <- read_sf(dsn = "data/source", layer = "GeneralizedLandUse2016")
+landcover <- raster::raster("data/source/landcover/tcma_lc_finalv1.tif", RAT = TRUE)
+
+
+```
+Question: What are the units of distance for the measurements of landcover, landuse, and the intersection dataframe?
+
+Landuse metadata:https://metrocouncil.org/Data-and-Maps/Research-and-Data/Metadata/Landuse-Hist-Research.aspx#Spatial_Reference_Information
+landcover metadata: https://rs.umn.edu/datalayers
+
+Additional info about coordinate systems: https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/understand-epsg-wkt-and-other-crs-definition-file-types/
+
+Directory of Projection coordinate systems: documnet:https://desktop.arcgis.com/en/arcmap/latest/map/projections/pdf/projected_coordinate_systems.pdf
+
+#Land Cover Data
+```{r}
+projection(landcover)
+#"+proj=utm +zone=15 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+```
+Metadata says it is1-meter resolution
+The CRS ID is 26915, as shown here : https://epsg.io/26915-8421v
+The towgs part is a conversion factor that is used if a datum conversion is required.
+
+#Land Use Data
+Gives acres and geometries
+
+```{r}
+projection(landuse)
+#"+proj=utm +zone=15 +datum=NAD83 +units=m +no_defs"
+```
+
+#Conclusion about units
+
+So these two datasets are in the same projection system and are both in meters. Both of the files have 'pure' geometric information based on their coordinate systems mapping.  The landuse shapefile is stored in discrete x-y points/polygons while the landcover raster is stored in pixels.
+
+(further comparisons: https://gisgeography.com/spatial-data-types-vector-raster/
+https://support.pitneybowes.com/SearchArticles/VFP05_KnowledgeWithSidebarHowTo?id=kA180000000Cu9DCAS&popup=false&lang=en_US
+https://gis.stackexchange.com/questions/57142/what-is-the-difference-between-vector-and-raster-data-models)
+
+The 'acres' column in the land use data was likely calculated from this 'pure' geometric information. Therefore when we have the landcover data intersected with the land use data, we were probably intersecting the geometries, not the acres, so the values calculated for each land cover category are likely in meters squared.
+
+
+```
