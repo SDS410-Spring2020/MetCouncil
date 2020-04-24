@@ -32,6 +32,8 @@ xmax <- 521239.5
 ymax <- 5029162
 xrange <-  521239.5 - 419971.5 
 yrange <- 5029162 -  4924218
+firsty <- yrange/2
+
 xcroprange <- 5000
 ycroprange <- 4990000 - 4980000
 yincrement <- yrange/10
@@ -44,9 +46,9 @@ e <- as(extent(460000, 465000, 4980000, 4990000), 'SpatialPolygons')
 
 #xmin, xmax, ymin, ymax
 
-crop1 <- as(extent(xmax - xincrement, xmax, ymax - yincrement, ymax), 'SpatialPolygons')
-crop2 <- as(extent(xmax - 2*xincrement, xmax - increment, ymax - 2*yincrement, ymax - yincrement), 'SpatialPolygons')
-crop3 <- as(extent(xmax - 3*xincrement, xmax - 2*increment, ymax - 3*yincrement, ymax - 2*yincrement), 'SpatialPolygons')
+crop1 <- as(extent(xmax - xincrement, xmax, ymin, ymax), 'SpatialPolygons')
+crop2 <- as(extent(xmax - 2*xincrement, xmax - increment, ymax - 2*yincrement, ymax), 'SpatialPolygons')
+crop3 <- as(extent(xmax - 3*xincrement, xmax - 2*increment, ymin, ymax), 'SpatialPolygons')
 crop4 <- as(extent(), 'SpatialPolygons')
 crop5 <- as(extent(), 'SpatialPolygons')
 crop6 <- as(extent(), 'SpatialPolygons')
