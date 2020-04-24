@@ -14,19 +14,14 @@ library(dplyr)
 library(rgdal)
 library(rgeos)
 
-extent(landcover)
-e <- as(extent(460000, 465000, 4980000, 4990000), 'SpatialPolygons')
-
-xrange <-  521239.5 - 419971.5 
-yrange <- 5029162 -  4924218
-
-
-
-crs(landcover)
-crs(e) <- "+proj=utm +zone=15 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
-crs(e)
-cropped2 <- raster::crop(landcover,e)
-plot(cropped2, axes = TRUE)
+# extent(landcover)
+# e <- as(extent(460000, 465000, 4980000, 4990000), 'SpatialPolygons')
+# 
+# crs(landcover)
+# crs(e) <- "+proj=utm +zone=15 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+# crs(e)
+# cropped2 <- raster::crop(landcover,e)
+# plot(cropped2, axes = TRUE)
 
 xmax <- 521239.5
 ymax <- 5029162
@@ -36,13 +31,29 @@ firsty <- yrange/2
 
 xcroprange <- 5000
 ycroprange <- 4990000 - 4980000
-yincrement <- yrange/10
+yincrement <- yrange/2
 xincrement <- xrange/10
 
 
 
 e <- as(extent(460000, 465000, 4980000, 4990000), 'SpatialPolygons')
 
+y1 <- c(4924218,4924218+yincrement)
+y1 <- c(4924218+yincrement, 5029162)
+
+x1 <- c(xmax - xincrement)
+x2 <- c(xmax - 2*xincrement, xmax - increment)
+x3 <- c(xmax - 3*xincrement, xmax - 2*increment)
+x4 <- c(xmax - 3*xincrement, xmax - 4*increment)
+x5 <- c(xmax - 4*xincrement, xmax - 5*increment)
+x6 <- c(xmax - 5*xincrement, xmax - 6*increment)
+x7 <- c(xmax - 6*xincrement, xmax - 7*increment)
+x8 <- c(xmax - 7*xincrement, xmax - 8*increment)
+x9 <- c(xmax - 8*xincrement, xmax - 9*increment)
+x10 <- c(xmax - 9*xincrement, xmax - 10*increment)
+
+
+#we want to split x into 10 and y into 2 fto obtain 20 blocks total
 
 #xmin, xmax, ymin, ymax
 
