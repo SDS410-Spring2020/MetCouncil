@@ -39,25 +39,25 @@ xincrement <- xrange/10
 e <- as(extent(460000, 465000, 4980000, 4990000), 'SpatialPolygons')
 
 y1 <- c(4924218,4924218+yincrement)
-y1 <- c(4924218+yincrement, 5029162)
+y2 <- c(4924218+yincrement, 5029162)
 
 x1 <- c(xmax - xincrement)
-x2 <- c(xmax - 2*xincrement, xmax - increment)
-x3 <- c(xmax - 3*xincrement, xmax - 2*increment)
-x4 <- c(xmax - 3*xincrement, xmax - 4*increment)
-x5 <- c(xmax - 4*xincrement, xmax - 5*increment)
-x6 <- c(xmax - 5*xincrement, xmax - 6*increment)
-x7 <- c(xmax - 6*xincrement, xmax - 7*increment)
-x8 <- c(xmax - 7*xincrement, xmax - 8*increment)
-x9 <- c(xmax - 8*xincrement, xmax - 9*increment)
-x10 <- c(xmax - 9*xincrement, xmax - 10*increment)
+x2 <- c(xmax - 2*xincrement, xmax - xincrement)
+x3 <- c(xmax - 3*xincrement, xmax - 2*xincrement)
+x4 <- c(xmax - 3*xincrement, xmax - 4*xincrement)
+x5 <- c(xmax - 4*xincrement, xmax - 5*xincrement)
+x6 <- c(xmax - 5*xincrement, xmax - 6*xincrement)
+x7 <- c(xmax - 6*xincrement, xmax - 7*xincrement)
+x8 <- c(xmax - 7*xincrement, xmax - 8*xincrement)
+x9 <- c(xmax - 8*xincrement, xmax - 9*xincrement)
+x10 <- c(xmax - 9*xincrement, xmax - 10*xincrement)
 
-
+test <-c(x1, max(xrange))
 #we want to split x into 10 and y into 2 fto obtain 20 blocks total
 
 #xmin, xmax, ymin, ymax
 
-crop1 <- as(extent(xmax - xincrement, xmax, ymin, ymax), 'SpatialPolygons')
+crop1 <- as(extent(x1, max(xrange),y1), 'SpatialPolygons')
 crop2 <- as(extent(xmax - 2*xincrement, xmax - increment, ymax - 2*yincrement, ymax), 'SpatialPolygons')
 crop3 <- as(extent(xmax - 3*xincrement, xmax - 2*increment, ymin, ymax), 'SpatialPolygons')
 crop4 <- as(extent(), 'SpatialPolygons')
