@@ -6,11 +6,6 @@ output: html_document
 ---
 
 ```{r}
-# xmin        : 419971.5 
-# xmax        : 521239.5 
-# ymin        : 4924218 
-# ymax        : 5029162 
-
 library(data.table)
 library(sf)
 library(sp)
@@ -21,6 +16,12 @@ library(rgeos)
 
 extent(landcover)
 e <- as(extent(460000, 465000, 4980000, 4990000), 'SpatialPolygons')
+
+xrange <-  521239.5 - 419971.5 
+yrange <- 5029162 -  4924218
+
+
+
 crs(landcover)
 crs(e) <- "+proj=utm +zone=15 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
 crs(e)
