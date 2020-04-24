@@ -28,7 +28,23 @@ cropped2 <- raster::crop(landcover,e)
 plot(cropped2, axes = TRUE)
 
 
+xrange <-  521239.5 - 419971.5 
+yrange <- 5029162 -  4924218
+xcroprange <- 5000
+ycroprange <- 4990000 - 4980000
+yincrement <- yrange/10
+xincrement <- xrange/10
 
+crop1 <- as(extent(), 'SpatialPolygons')
+crop2 <- as(extent(), 'SpatialPolygons')
+crop3 <- as(extent(), 'SpatialPolygons')
+crop4 <- as(extent(), 'SpatialPolygons')
+crop5 <- as(extent(), 'SpatialPolygons')
+crop6 <- as(extent(), 'SpatialPolygons')
+crop7 <- as(extent(), 'SpatialPolygons')
+crop8 <- as(extent(), 'SpatialPolygons')
+crop9 <- as(extent(), 'SpatialPolygons')
+crop10 <- as(extent(), 'SpatialPolygons')
 
 
 ```
