@@ -41,40 +41,50 @@ e <- as(extent(460000, 465000, 4980000, 4990000), 'SpatialPolygons')
 y1 <- c(4924218,4924218+yincrement)
 y2 <- c(4924218+yincrement, 5029162)
 
-x1 <- c(xmax - xincrement)
+x1 <- c(xmax - xincrement, xmax)
 x2 <- c(xmax - 2*xincrement, xmax - xincrement)
 x3 <- c(xmax - 3*xincrement, xmax - 2*xincrement)
-x4 <- c(xmax - 3*xincrement, xmax - 4*xincrement)
-x5 <- c(xmax - 4*xincrement, xmax - 5*xincrement)
-x6 <- c(xmax - 5*xincrement, xmax - 6*xincrement)
-x7 <- c(xmax - 6*xincrement, xmax - 7*xincrement)
-x8 <- c(xmax - 7*xincrement, xmax - 8*xincrement)
-x9 <- c(xmax - 8*xincrement, xmax - 9*xincrement)
-x10 <- c(xmax - 9*xincrement, xmax - 10*xincrement)
+x4 <- c(xmax - 4*xincrement, xmax - 3*xincrement)
+x5 <- c(xmax - 5*xincrement, xmax - 4*xincrement)
+x6 <- c(xmax - 6*xincrement, xmax - 5*xincrement)
+x7 <- c(xmax - 7*xincrement, xmax - 6*xincrement)
+x8 <- c(xmax - 8*xincrement, xmax - 7*xincrement)
+x9 <- c(xmax - 9*xincrement, xmax - 8*xincrement)
+x10 <- c(xmax - 10*xincrement, xmax - 9*xincrement)
 
-test <-c(x1, xmax)
 #we want to split x into 10 and y into 2 fto obtain 20 blocks total
 #xmin, xmax, ymin, ymax
 
-crop1 <- as(extent(x1, xmax,y1), 'SpatialPolygons')
-crop2 <- as(extent(x2,x1,y1), 'SpatialPolygons')
-crop3 <- as(extent(x3,x2,y1), 'SpatialPolygons')
-crop4 <- as(extent(x4,x3,y1), 'SpatialPolygons')
-crop5 <- as(extent(x5, x4,y1), 'SpatialPolygons')
-crop6 <- as(extent(x6,x5,y1), 'SpatialPolygons')
-crop7 <- as(extent(x7, x6,y1), 'SpatialPolygons')
-crop8 <- as(extent(x8,x7,y1), 'SpatialPolygons')
-crop9 <- as(extent(x9, x8,y1), 'SpatialPolygons')
-crop10 <- as(extent(x10, x9,y1), 'SpatialPolygons')
-crop11 <- as(extent(x1, xmax,y2), 'SpatialPolygons')
-crop12 <- as(extent(x2,x1,y2), 'SpatialPolygons')
-crop13 <- as(extent(x3,x2,y2), 'SpatialPolygons')
-crop14 <- as(extent(x4,x3,y2), 'SpatialPolygons')
-crop15 <- as(extent(x5, x4,y2), 'SpatialPolygons')
-crop16 <- as(extent(x6,x5,y2), 'SpatialPolygons')
-crop17 <- as(extent(x7, x6,y2), 'SpatialPolygons')
-crop18 <- as(extent(x8,x7,y2), 'SpatialPolygons')
-crop19 <- as(extent(x9, x8,y2), 'SpatialPolygons')
-crop20 <- as(extent(x10,x9,y2), 'SpatialPolygons')
+x1
+x2
+x3
+x4
+x5
+x6
+x7
+x8
+x9
+x10
+
+crop1 <- as(extent(x1,y1), 'SpatialPolygons')
+crop2 <- as(extent(x2,y1), 'SpatialPolygons')
+crop3 <- as(extent(x3,y1), 'SpatialPolygons')
+crop4 <- as(extent(x4,y1), 'SpatialPolygons')
+crop5 <- as(extent(x5,y1), 'SpatialPolygons')
+crop6 <- as(extent(x6,y1), 'SpatialPolygons')
+crop7 <- as(extent(x7,y1), 'SpatialPolygons')
+crop8 <- as(extent(x8,y1), 'SpatialPolygons')
+crop9 <- as(extent(x9,y1), 'SpatialPolygons')
+crop10 <- as(extent(x10,y1), 'SpatialPolygons')
+crop11 <- as(extent(x1,y2), 'SpatialPolygons')
+crop12 <- as(extent(x2,y2), 'SpatialPolygons')
+crop13 <- as(extent(x3,y2), 'SpatialPolygons')
+crop14 <- as(extent(x4,y2), 'SpatialPolygons')
+crop15 <- as(extent(x5,y2), 'SpatialPolygons')
+crop16 <- as(extent(x6,y2), 'SpatialPolygons')
+crop17 <- as(extent(x7,y2), 'SpatialPolygons')
+crop18 <- as(extent(x8,y2), 'SpatialPolygons')
+crop19 <- as(extent(x9,y2), 'SpatialPolygons')
+crop20 <- as(extent(x10,y2), 'SpatialPolygons')
 
 ```
