@@ -98,6 +98,7 @@ land1 <- raster::crop(landcover,crop1)
 land2 <- raster::crop(landcover,crop2)
 land3 <- raster::crop(landcover,crop3)
 land4 <- raster::crop(landcover,crop4)
+
 land5 <- raster::crop(landcover,crop5)
 land6 <- raster::crop(landcover,crop6)
 
@@ -122,6 +123,9 @@ land22 <- raster::crop(landcover,crop22)
 land23 <- raster::crop(landcover,crop23)
 land24 <- raster::crop(landcover,crop24)
 land25 <- raster::crop(landcover,crop25)
+```
+
+```{r}
 land26 <- raster::crop(landcover,crop26)
 land27 <- raster::crop(landcover,crop27)
 land28 <- raster::crop(landcover,crop28)
@@ -162,6 +166,20 @@ tile27 <- raster::as.data.frame(land27, xy = TRUE)
 tile28 <- raster::as.data.frame(land28, xy = TRUE)
 tile29 <- raster::as.data.frame(land29, xy = TRUE)
 tile30 <- raster::as.data.frame(land30, xy = TRUE)
+
+
+memory.limit(size = 30000)
+memory.size(max = NA)
+```
+
+
+```{r}
+
+#let's try this again
+
+
+
+
 ```
 
 
