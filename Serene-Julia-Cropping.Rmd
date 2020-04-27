@@ -412,3 +412,37 @@ land30 <- raster::raster("land30.tif", RAT = TRUE)
 ```
 
 
+Comments on merging 30 dataframes and calculating the percentages for each region:
+```{r}
+# Merging all 30 files: could possibly use rbind() on .txt and .csv files because all tables have the same variable names
+# ie. Combinedtiles <- rbind(tile1, tile2, tile3,..., tile30)
+# should result in a datafram called 'Combinedtiles' with ~1.5e+09 observations
+
+#Delete the pixel information for memory management. Omitt 'x' and 'y' columns and keep only the 'tcma_lc_finalv1' column
+# ie. Combinedtiles %>%
+#          select(tcma_lc_finalv1)
+
+# Calculating percentages for each category:
+# Combinedtiles %>%
+#  group_by("tcma_lc_finalv1") %>%
+#  summarize(count = n()) %>% --> should result in a summary count for each category
+
+#Combinedtiles %>%
+#  mutate(totalCount = sum(count),
+#         Percent = count/totalCount) --> should result in the percentage for each category
+  
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
