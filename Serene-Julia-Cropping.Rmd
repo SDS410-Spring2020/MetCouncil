@@ -137,6 +137,8 @@ land30 <- raster::crop(landcover,crop30)
 ```{r}
 
 tile1 <- raster::as.data.frame(land1, xy = TRUE)
+remove(land1)
+remove(data)
 tile2 <- raster::as.data.frame(land2, xy = TRUE)
 tile3 <- raster::as.data.frame(land3, xy = TRUE)
 tile4 <- raster::as.data.frame(land4, xy = TRUE)
@@ -168,8 +170,10 @@ tile29 <- raster::as.data.frame(land29, xy = TRUE)
 tile30 <- raster::as.data.frame(land30, xy = TRUE)
 
 
-memory.limit(size = 30000)
+memory.limit(size = 100000000)
 memory.size(max = NA)
+
+
 ```
 
 
@@ -177,7 +181,232 @@ memory.size(max = NA)
 
 #let's try this again
 
+land1 <- raster::raster("land1.tif", RAT = TRUE)
+tile1 <- raster::as.data.frame(land1, xy = TRUE)
+remove(land1)
+fwrite(tile1, "tile1.txt")
+remove(tile1)
 
+land2 <- raster::raster("land2.tif", RAT = TRUE)
+tile2 <- raster::as.data.frame(land2, xy = TRUE)
+remove(land2)
+fwrite(tile2, "tile2.txt")
+remove(tile2)
+
+land3 <- raster::raster("land3.tif", RAT = TRUE)
+tile3 <- raster::as.data.frame(land3, xy = TRUE)
+remove(land3)
+fwrite(tile3, "tile3.txt")
+remove(tile3)
+
+land4 <- raster::raster("land4.tif", RAT = TRUE)
+tile4 <- raster::as.data.frame(land4, xy = TRUE)
+remove(land4)
+fwrite(tile4, "tile4.txt")
+remove(tile4)
+```
+
+```{r}
+
+land5 <- raster::raster("land5.tif", RAT = TRUE)
+tile5 <- raster::as.data.frame(land5, xy = TRUE)
+remove(land5)
+fwrite(tile5, "tile5.txt")
+remove(tile5)
+
+land6 <- raster::raster("land6.tif", RAT = TRUE)
+tile6 <- raster::as.data.frame(land6, xy = TRUE)
+remove(land6)
+fwrite(tile6, "tile6.txt")
+remove(tile6)
+
+land7 <- raster::raster("land7.tif", RAT = TRUE)
+tile7 <- raster::as.data.frame(land7, xy = TRUE)
+remove(land7)
+fwrite(tile7, "tile7.txt")
+remove(tile7)
+```
+
+```{r}
+
+land8 <- raster::raster("land8.tif", RAT = TRUE)
+tile8 <- raster::as.data.frame(land8, xy = TRUE)
+remove(land8)
+fwrite(tile8, "tile8.txt")
+remove(tile8)
+
+land9 <- raster::raster("land9.tif", RAT = TRUE)
+tile9 <- raster::as.data.frame(land9, xy = TRUE)
+remove(land9)
+fwrite(tile9, "tile9.txt")
+remove(tile9)
+
+```
+
+```{r}
+land10 <- raster::raster("land10.tif", RAT = TRUE)
+tile10 <- raster::as.data.frame(land10, xy = TRUE)
+remove(land10)
+fwrite(tile10, "tile10.txt")
+remove(tile10)
+
+land11 <- raster::raster("land11.tif", RAT = TRUE)
+tile11 <- raster::as.data.frame(land11, xy = TRUE)
+remove(land11)
+fwrite(tile11, "tile11.txt")
+remove(tile11)
+
+land12 <- raster::raster("land12.tif", RAT = TRUE)
+tile12 <- raster::as.data.frame(land12, xy = TRUE)
+remove(land12)
+fwrite(tile12, "tile12.txt")
+remove(tile12)
+
+
+land13 <- raster::raster("land13.tif", RAT = TRUE)
+tile13 <- raster::as.data.frame(land13, xy = TRUE)
+remove(land13)
+fwrite(tile13, "tile13.txt")
+remove(tile13)
+
+land14 <- raster::raster("land14.tif", RAT = TRUE)
+tile14 <- raster::as.data.frame(land14, xy = TRUE)
+remove(land14)
+fwrite(tile14, "tile14.txt")
+remove(tile14)
+
+land15 <- raster::raster("land15.tif", RAT = TRUE)
+tile15 <- raster::as.data.frame(land15, xy = TRUE)
+remove(land15)
+fwrite(tile15, "tile15.txt")
+remove(tile15)
+
+land16 <- raster::raster("land16.tif", RAT = TRUE)
+tile16 <- raster::as.data.frame(land16, xy = TRUE)
+remove(land16)
+fwrite(tile16, "tile16.txt")
+remove(tile16)
+
+land17 <- raster::raster("land17.tif", RAT = TRUE)
+tile17 <- raster::as.data.frame(land17, xy = TRUE)
+remove(land17)
+fwrite(tile17, "tile17.txt")
+remove(tile17)
+
+land18 <- raster::raster("land18.tif", RAT = TRUE)
+tile18 <- raster::as.data.frame(land18, xy = TRUE)
+remove(land18)
+fwrite(tile18, "tile18.txt")
+remove(tile18)
+
+land19 <- raster::raster("land19.tif", RAT = TRUE)
+tile19 <- raster::as.data.frame(land19, xy = TRUE)
+remove(land19)
+fwrite(tile19, "tile19.txt")
+remove(tile19)
+
+land20 <- raster::raster("land20.tif", RAT = TRUE)
+tile20 <- raster::as.data.frame(land20, xy = TRUE)
+remove(land20)
+fwrite(tile20, "tile20.txt")
+remove(tile20)
+
+
+land21 <- raster::raster("land21.tif", RAT = TRUE)
+tile21 <- raster::as.data.frame(land21, xy = TRUE)
+remove(land21)
+fwrite(tile21, "tile21.txt")
+remove(tile21)
+
+land22 <- raster::raster("land22.tif", RAT = TRUE)
+tile22 <- raster::as.data.frame(land22, xy = TRUE)
+remove(land22)
+fwrite(tile22, "tile22.txt")
+remove(tile22)
+
+
+land23 <- raster::raster("land23.tif", RAT = TRUE)
+tile23 <- raster::as.data.frame(land23, xy = TRUE)
+remove(land23)
+fwrite(tile23, "tile23.txt")
+remove(tile23)
+
+land24 <- raster::raster("land24.tif", RAT = TRUE)
+tile24 <- raster::as.data.frame(land24, xy = TRUE)
+remove(land24)
+fwrite(tile24, "tile24.txt")
+remove(tile24)
+
+land25 <- raster::raster("land25.tif", RAT = TRUE)
+tile25 <- raster::as.data.frame(land25, xy = TRUE)
+remove(land25)
+fwrite(tile25, "tile25.txt")
+remove(tile25)
+
+land26 <- raster::raster("land26.tif", RAT = TRUE)
+tile26 <- raster::as.data.frame(land26, xy = TRUE)
+remove(land26)
+fwrite(tile26, "tile26.txt")
+remove(tile26)
+
+land27 <- raster::raster("land27.tif", RAT = TRUE)
+tile27 <- raster::as.data.frame(land27, xy = TRUE)
+remove(land27)
+fwrite(tile27, "tile27.txt")
+remove(tile27)
+
+land28 <- raster::raster("land28.tif", RAT = TRUE)
+tile28 <- raster::as.data.frame(land28, xy = TRUE)
+remove(land28)
+fwrite(tile28, "tile28.txt")
+remove(tile28)
+
+
+land29 <- raster::raster("land29.tif", RAT = TRUE)
+tile29 <- raster::as.data.frame(land29, xy = TRUE)
+remove(land29)
+fwrite(tile29, "tile29.txt")
+remove(tile29)
+
+land30 <- raster::raster("land30.tif", RAT = TRUE)
+tile30 <- raster::as.data.frame(land30, xy = TRUE)
+remove(land30)
+fwrite(tile30, "tile30.txt")
+remove(tile30)
+
+
+
+```
+
+
+```{r}
+land4 <- raster::raster("land4.tif", RAT = TRUE)
+land5 <- raster::raster("land5.tif", RAT = TRUE)
+land6 <- raster::raster("land6.tif", RAT = TRUE)
+land7 <- raster::raster("land7.tif", RAT = TRUE)
+land8 <- raster::raster("land8.tif", RAT = TRUE)
+land9 <- raster::raster("land9.tif", RAT = TRUE)
+land10 <- raster::raster("land10.tif", RAT = TRUE)
+land11 <- raster::raster("land11.tif", RAT = TRUE)
+land12 <- raster::raster("land12.tif", RAT = TRUE)
+land13 <- raster::raster("land13.tif", RAT = TRUE)
+land14 <- raster::raster("land14.tif", RAT = TRUE)
+land15 <- raster::raster("land15.tif", RAT = TRUE)
+land16 <- raster::raster("land16.tif", RAT = TRUE)
+land17 <- raster::raster("land17.tif", RAT = TRUE)
+land18 <- raster::raster("land18.tif", RAT = TRUE)
+land19 <- raster::raster("land19.tif", RAT = TRUE)
+land20 <- raster::raster("land20.tif", RAT = TRUE)
+land21 <- raster::raster("land21.tif", RAT = TRUE)
+land22 <- raster::raster("land22.tif", RAT = TRUE)
+land23 <- raster::raster("land23.tif", RAT = TRUE)
+land24 <- raster::raster("land24.tif", RAT = TRUE)
+land25 <- raster::raster("land25.tif", RAT = TRUE)
+land26 <- raster::raster("land26.tif", RAT = TRUE)
+land27 <- raster::raster("land27.tif", RAT = TRUE)
+land28 <- raster::raster("land28.tif", RAT = TRUE)
+land29 <- raster::raster("land29.tif", RAT = TRUE)
+land30 <- raster::raster("land30.tif", RAT = TRUE)
 
 
 ```
