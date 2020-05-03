@@ -451,6 +451,61 @@ Combinedtiles %>%
 
 
 
+Merging by thirds!
+```{r}
+#Combinedtiles_1
+Combinedtiles_1 <- rbind(tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, tile9, tile10)
+
+Combinedtiles_1 %>%
+          select(tcma_lc_finalv1)
+
+Combinedtiles_1 %>%
+  group_by("tcma_lc_finalv1") %>%
+  summarize(count = n())
+
+Combinedtiles_1 %>%
+  mutate(totalCount = sum(count),
+         Percent = count/totalCount)
+
+#Combinedtiles_2
+Combinedtiles_2 <- rbind(tile11, tile12, tile13, tile14, tile15, tile16, tile17, tile18, tile19, tile20)
+
+Combinedtiles_2 %>%
+          select(tcma_lc_finalv1)
+
+Combinedtiles_2 %>%
+  group_by("tcma_lc_finalv1") %>%
+  summarize(count = n())
+
+Combinedtiles_2 %>%
+  mutate(totalCount = sum(count),
+         Percent = count/totalCount)
+
+#Combinedtiles_3
+Combinedtiles_3 <- rbind(tile21, tile22, tile23, tile24, tile25, tile26, tile27, tile28, tile29, tile30)
+
+Combinedtiles_3 %>%
+          select(tcma_lc_finalv1)
+
+Combinedtiles_3 %>%
+  group_by("tcma_lc_finalv1") %>%
+  summarize(count = n())
+
+Combinedtiles_3 %>%
+  mutate(totalCount = sum(count),
+         Percent = count/totalCount)
+
+#Combinedtiles_final
+Combinedtiles_final <- rbind(Combinedtiles_1, Combinedtiles_2, Combinedtiles_3)
+
+
+
+
+```
+
+
+
+
 
 
 
