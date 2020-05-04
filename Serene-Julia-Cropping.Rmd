@@ -605,9 +605,13 @@ tile30 <- tile5 %>% rename(a = land30)
 Combinedtiles_1 <- rbind(tile1, tile2, tile3, tile4, tile5)
 
 
-df <- Combinedtiles_1 %>%
-  group_by("a") %>%
+df <- tile1 %>%
+  group_by(a) %>%
   summarize(count = n())
+
+#tile1 total = 354252587
+total <- sum(df$count)
+#it matches!
 
 Combinedtiles_1 %>%
   mutate(totalCount = sum(count),
