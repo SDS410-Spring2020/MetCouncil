@@ -548,6 +548,7 @@ memory.size(max = NA)
 ```
 
 The Active Chunk
+Essential info is at the top of the chunk
 
 ```{r}
 head(tile1)
@@ -558,6 +559,15 @@ head(tile1)
 # 4: 8
 # 5: 8
 # 6: 8
+
+
+unique(tile1$a)
+class(tile1$a)
+# 
+# > unique(tile1$a)
+#  [1]  8  6  1  4  7 11  0  3  9 10  5  2 12
+# > class(tile1$a)
+# [1] "integer"
 
 
 #rename tile dataframes so that they all have the same col name for rbind
@@ -594,8 +604,6 @@ tile30 <- tile5 %>% rename(a = land30)
 
 Combinedtiles_1 <- rbind(tile1, tile2, tile3, tile4, tile5)
 
-unique(tile1$a)
-class(tile1$a)
 
 df <- Combinedtiles_1 %>%
   group_by("a") %>%
