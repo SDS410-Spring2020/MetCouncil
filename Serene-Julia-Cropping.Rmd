@@ -674,6 +674,10 @@ total <- sum(final_data$num)
 # total
 # [1] 20539736663
 
+#Calculating the percentage
+final_data <- final_data %>%
+  mutate(Percent = (num/total)*100)
+
 ```
 
 
