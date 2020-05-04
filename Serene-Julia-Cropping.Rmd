@@ -610,6 +610,7 @@ df <- tile1 %>%
 
 #tile1 total = 354252587
 total <- sum(df$count)
+total <- sum(final_data$num)
 #it matches!
  
 
@@ -631,48 +632,47 @@ memory.size(max = NA)
 
 #intialize structures for the loop
 listfiles <- Sys.glob(file.path("E:/tiles/", "*.txt"))
-final_data <- data.frame(var = c(1:12), num = c(0,0,0,0,0,0,0,0,0,0,0,0))
+final_data <- data.frame(var = c(1:13), num = c(0,0,0,0,0,0,0,0,0,0,0,0,0))
+library(stats)
 
-for (i in length(listfiles)){
+for (i in 1:30){
   #load in tile i
-  fread(listfiles[i]) %>%
+  new_data <- fread(listfiles[i]) %>%
+  #fix colnames
+  setNames(c("x", "y", "a")) %>%
   # summarize and count categories for tile i
-  group_by() %>%
+  group_by(a) %>%
   summarize(count = n())
   # add these counts to table A: categories 0-12
-  final_data$number <- final_data$number + new_data$number
+  final_data$num <- final_data$num + new_data$count
   # delete tile i
-  remove(listfiles[i])
+  #remove(new_data)
 # loop: load next tile i
 }
 
 
-for (i in (1:30)){
-  tile[i] <- fread("E:/tiles/tile[[i]].txt", drop = c(1:2))
-}
 
 
-f <- file.path("E:/tiles")
-myFiles <- list.files(pattern="tile[i].*txt")
-data <- lapply(listfiles, fread(dropop = c(1:2)))
+final_data
+# 
+#    var        num
+# 1    1 2922927079
+# 2    2 2311941475
+# 3    3  713179481
+# 4    4  964031672
+# 5    5 1529041012
+# 6    6 1151912655
+# 7    7 2369823175
+# 8    8  820881998
+# 9    9 2498075451
+# 10  10 1326997672
+# 11  11  995635847
+# 12  12  808214555
+# 13  13 2127074591
 
-listfiles <- Sys.glob(file.path("E:/tiles/", "*.txt"))
-
-files <- lapply(listfiles, fread(drop = c(1:2)))
-# creates the list of all the csv files in the directory
-for (k in 1:length(listcsv)){
- tile[i] <- fread(listcsv[k], drop = c(1:2))
-}
-
-
-
-
-
-
-
-
-
-
+total <- sum(final_data$num)
+# total
+# [1] 20539736663
 
 ```
 
