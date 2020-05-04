@@ -602,7 +602,6 @@ tile28 <- tile3 %>% rename(a = land28)
 tile29 <- tile4 %>% rename(a = land29)
 tile30 <- tile5 %>% rename(a = land30)
 
-Combinedtiles_1 <- rbind(tile1, tile2, tile3, tile4, tile5)
 
 
 df <- tile1 %>%
@@ -612,77 +611,73 @@ df <- tile1 %>%
 #tile1 total = 354252587
 total <- sum(df$count)
 #it matches!
+ 
 
-Combinedtiles_1 %>%
-  mutate(totalCount = sum(count),
-  Percent = count/totalCount)
+#Count tabulation function
 
-#Combinedtiles_2
-Combinedtiles_2 <- rbind(tile6, tile7, tile8, tile9, tile10)
+#loop with if statement
+# load tile i
+# summarize and count categories for tile i
+# add these counts to table A: categories 0-12
+# delete tile i
+# loop: load next tile i
 
-Combinedtiles_2 %>%
-  mutate(totalCount = sum(count),
-  Percent = count/totalCount)
+#length of loop : 30
+#:length of table A is : 12
 
-Combinedtiles_2 %>%
-  group_by("a") %>%
+memory.limit(size = 10000000000)
+memory.size(max = NA)
+
+
+#intialize structures for the loop
+listfiles <- Sys.glob(file.path("E:/tiles/", "*.txt"))
+final_data <- data.frame(var = c(1:12), num = c(0,0,0,0,0,0,0,0,0,0,0,0))
+
+for (i in length(listfiles)){
+  #load in tile i
+  fread(listfiles[i]) %>%
+  # summarize and count categories for tile i
+  group_by() %>%
   summarize(count = n())
+  # add these counts to table A: categories 0-12
+  final_data$number <- final_data$number + new_data$number
+  # delete tile i
+  remove(listfiles[i])
+# loop: load next tile i
+}
 
-Combinedtiles_2 %>%
-  mutate(totalCount = sum(count),
-  Percent = count/totalCount)
 
-#Combinedtiles_3
-Combinedtiles_3 <- rbind(tile11, tile12, tile13, tile14, tile15)
+for (i in (1:30)){
+  tile[i] <- fread("E:/tiles/tile[[i]].txt", drop = c(1:2))
+}
 
-Combinedtiles_3 %>%
-  group_by("a") %>%
-  summarize(count = n())
 
-Combinedtiles_3 %>%
-  mutate(totalCount = sum(count),
-  Percent = count/totalCount)
+f <- file.path("E:/tiles")
+myFiles <- list.files(pattern="tile[i].*txt")
+data <- lapply(listfiles, fread(dropop = c(1:2)))
 
-#Combinedtiles_4
-Combinedtiles_4 <- rbind(tile16, tile17, tile18, tile19, tile20)
+listfiles <- Sys.glob(file.path("E:/tiles/", "*.txt"))
 
-Combinedtiles_4 %>%
-  group_by("a") %>%
-  summarize(count = n())
+files <- lapply(listfiles, fread(drop = c(1:2)))
+# creates the list of all the csv files in the directory
+for (k in 1:length(listcsv)){
+ tile[i] <- fread(listcsv[k], drop = c(1:2))
+}
 
-Combinedtiles_4 %>%
-  mutate(totalCount = sum(count),
-  Percent = count/totalCount)
 
-#Combinedtiles_5
-Combinedtiles_5 <- rbind(tile21, tile22, tile23, tile24, tile25)
 
-Combinedtiles_5 %>%
-  group_by("a") %>%
-  summarize(count = n())
 
-Combinedtiles_5 %>%
-  mutate(totalCount = sum(count),
-  Percent = count/totalCount)
 
-#Combinedtiles_6
-Combinedtiles_6 <- rbind(tile26, tile27, tile28, tile29, tile30)
 
-Combinedtiles_6 %>%
-  group_by("a") %>%
-  summarize(count = n())
 
-Combinedtiles_6 %>%
-  mutate(totalCount = sum(count),
-  Percent = count/totalCount)
 
-#Combinedtiles_final
-Combinedtiles_final <- rbind(Combinedtiles_1, Combinedtiles_2, Combinedtiles_3, Combinedtiles_4, Combinedtiles_5, Combinedtiles_6)
+
+
+
 ```
 
 
 
-```
 
 
 
