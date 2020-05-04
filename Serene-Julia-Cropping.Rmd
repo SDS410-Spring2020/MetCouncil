@@ -414,9 +414,50 @@ land30 <- raster::raster("land30.tif", RAT = TRUE)
 
 Comments on merging 30 dataframes and calculating the percentages for each region:
 ```{r}
-tile1.1 <- fread("E:/tiles/tile1.txt", drop = c(1:2))
+tile1 <- fread("E:/tiles/tile1.txt", drop = c(1:2))
 tile2 <- fread("E:/tiles/tile2.txt", drop = c(1:2))
 tile3 <- fread("E:/tiles/tile3.txt", drop = c(1:2))
+tile4 <- fread("E:/tiles/tile4.txt", drop = c(1:2))
+tile5 <- fread("E:/tiles/tile5.txt", drop = c(1:2))
+tile6 <- fread("E:/tiles/tile6.txt", drop = c(1:2))
+tile7 <- fread("E:/tiles/tile7.txt", drop = c(1:2))
+tile8 <- fread("E:/tiles/tile8.txt", drop = c(1:2))
+tile9 <- fread("E:/tiles/tile9.txt", drop = c(1:2))
+tile10 <- fread("E:/tiles/tile10.txt", drop = c(1:2))
+tile11 <- fread("E:/tiles/tile11.txt", drop = c(1:2))
+tile12 <- fread("E:/tiles/tile12.txt", drop = c(1:2))
+tile13 <- fread("E:/tiles/tile13.txt", drop = c(1:2))
+tile14 <- fread("E:/tiles/tile14.txt", drop = c(1:2))
+tile15 <- fread("E:/tiles/tile15.txt", drop = c(1:2))
+tile16 <- fread("E:/tiles/tile16.txt", drop = c(1:2))
+tile17 <- fread("E:/tiles/tile17.txt", drop = c(1:2))
+tile18 <- fread("E:/tiles/tile18.txt", drop = c(1:2))
+tile19 <- fread("E:/tiles/tile19.txt", drop = c(1:2))
+tile20 <- fread("E:/tiles/tile20.txt", drop = c(1:2))
+tile21 <- fread("E:/tiles/tile21.txt", drop = c(1:2))
+tile22 <- fread("E:/tiles/tile22.txt", drop = c(1:2))
+tile23 <- fread("E:/tiles/tile23.txt", drop = c(1:2))
+tile24 <- fread("E:/tiles/tile24.txt", drop = c(1:2))
+tile25 <- fread("E:/tiles/tile25.txt", drop = c(1:2))
+tile26 <- fread("E:/tiles/tile26.txt", drop = c(1:2))
+tile27 <- fread("E:/tiles/tile27.txt", drop = c(1:2))
+tile28 <- fread("E:/tiles/tile28.txt", drop = c(1:2))
+tile29 <- fread("E:/tiles/tile29.txt", drop = c(1:2))
+tile30 <- fread("E:/tiles/tile30.txt", drop = c(1:2))
+
+
+
+memory.limit(size = 100000000000000000000)
+memory.size(max = NA)
+```
+
+
+## [1] "https://stats.idre.ucla.edu/stat/data/auto.dta"   
+## [2] "https://stats.idre.ucla.edu/stat/data/cancer.dta" 
+## [3] "https://stats.idre.ucla.edu/stat/data/efa_cfa.dta"
+## [4] "https://stats.idre.ucla.edu/stat/data/hsbmar.dta" 
+
+Now we would like to use a loop to read all of these files from the internet and store them in one list, d. Note that this would work just as well if the files were on a local disk instead of the internet. R can easily read local or remote files. lapply loops through each file in f, passes it to the function specified (in this case read.dta) and returns all of the results as a list which is then assigned to d.
 
 
 head(tile1)
@@ -444,6 +485,52 @@ Combinedtiles %>%
 
 
 
+```{r}
+#Combinedtiles_1
+head(tile1)
+head(tile2)
+
+remove(tile15,tile14,tile13,tile12,tile11,tile10,tile9,tile8,tile7,tile6)
+#Combinedtiles_1
+Combinedtiles_1 <- rbind(tile1, tile2, tile3, tile4, tile5, fill = TRUE)
+
+Combinedtiles_1 %>%
+          select(tcma_lc_finalv1)Combinedtiles_1 %>%
+  group_by("tcma_lc_finalv1") %>%
+  summarize(count = n())Combinedtiles_1 %>%
+  mutate(totalCount = sum(count),
+         Percent = count/totalCount)#Combinedtiles_2
+Combinedtiles_2 <- rbind(tile6, tile7, tile8, tile9, tile10)Combinedtiles_2 %>%
+          select(tcma_lc_finalv1)Combinedtiles_2 %>%
+  group_by("tcma_lc_finalv1") %>%
+  summarize(count = n())Combinedtiles_2 %>%
+  mutate(totalCount = sum(count),
+         Percent = count/totalCount)#Combinedtiles_3
+Combinedtiles_3 <- rbind(tile11, tile12, tile13, tile14, tile15)Combinedtiles_3 %>%
+          select(tcma_lc_finalv1)Combinedtiles_3 %>%
+  group_by("tcma_lc_finalv1") %>%
+  summarize(count = n())Combinedtiles_3 %>%
+  mutate(totalCount = sum(count),
+         Percent = count/totalCount)#Combinedtiles_4
+Combinedtiles_4 <- rbind(tile16, tile17, tile18, tile19, tile20)Combinedtiles_4 %>%
+          select(tcma_lc_finalv1)Combinedtiles_4 %>%
+  group_by("tcma_lc_finalv1") %>%
+  summarize(count = n())Combinedtiles_4 %>%
+  mutate(totalCount = sum(count),
+         Percent = count/totalCount)#Combinedtiles_5
+Combinedtiles_5 <- rbind(tile21, tile22, tile23, tile24, tile25)Combinedtiles_5 %>%
+          select(tcma_lc_finalv1)Combinedtiles_5 %>%
+  group_by("tcma_lc_finalv1") %>%
+  summarize(count = n())Combinedtiles_5 %>%
+  mutate(totalCount = sum(count),
+         Percent = count/totalCount)#Combinedtiles_6
+Combinedtiles_6 <- rbind(tile26, tile27, tile28, tile29, tile30)Combinedtiles_6 %>%
+          select(tcma_lc_finalv1)Combinedtiles_6 %>%
+  group_by("tcma_lc_finalv1") %>%
+  summarize(count = n())Combinedtiles_6 %>%
+  mutate(totalCount = sum(count),
+         Percent = count/totalCount)#Combinedtiles_final
+Combinedtiles_final <- rbind(Combinedtiles_1, Combinedtiles_2, Combinedtiles_3, Combinedtiles_4, Combinedtiles_5, Combinedtiles_6)
 ```
 
 
