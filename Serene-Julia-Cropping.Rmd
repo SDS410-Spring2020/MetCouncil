@@ -720,6 +720,10 @@ for (i in 1:30){  new_data <- fread(listfiles[i])
 }
 
 
+#Calculating the percentage
+final_data <- final_data %>%
+  mutate(Percent = (num/total)*100)
+
 ```
 
 
