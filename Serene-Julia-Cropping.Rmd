@@ -7,6 +7,7 @@ output: html_document
 
 ```{r}
 library(data.table)
+library(stats)
 library(sf)
 library(sp)
 library(raster)
@@ -601,7 +602,7 @@ tile27 <- tile2 %>% rename(a = land27)
 tile28 <- tile3 %>% rename(a = land28)
 tile29 <- tile4 %>% rename(a = land29)
 tile30 <- tile5 %>% rename(a = land30)
-
+```
 
 
 df <- tile1 %>%
@@ -626,9 +627,10 @@ total <- sum(final_data$num)
 #length of loop : 30
 #:length of table A is : 12
 
+Working Loop
+```{r}
 memory.limit(size = 10000000000)
 memory.size(max = NA)
-
 
 #intialize structures for the loop
 listfiles <- Sys.glob(file.path("E:/tiles/", "*.txt"))
@@ -673,6 +675,50 @@ final_data
 total <- sum(final_data$num)
 # total
 # [1] 20539736663
+```
+
+```{r}
+
+
+memory.limit(size = 10000000000)
+memory.size(max = NA)
+
+#Jessica's code
+listfiles <- Sys.glob(file.path("E:/tiles/", "*.txt"))
+final_data <- data.frame(var = c(0:12), num = c(0,0,0,0,0,0,0,0,0,0,0,0,0))
+
+library(stats)
+library(dplyr)
+library(data.table)
+
+for (i in 1:30){
+  #load in tile i
+  new_data <- fread(listfiles[i]) %>%
+  #fix colnames
+  setNames(c("x", "y", "a")) 
+  new_data$a <- factor(new_data$a, levels= 1:12)
+  # summarize and count categories for tile i
+  new_data <- new_data %>%
+  count(a, .drop = FALSE) 
+  # add these counts to table A: categories 0-12
+  final_data$num <- final_data$num + new_data$n
+  # delete tile i
+  #remove(new_data)
+# loop: load next tile i
+}
+
+final_data <- data.frame(var = c(0:12), num = c(0,0,0,0,0,0,0,0,0,0,0,0,0))
+
+for (i in 1:30){  new_data <- fread(listfiles[i])
+  for(j in 1:nrow(new_data)){
+    final_data <- final_data %>% 
+      mutate(num = case_when(
+        var == new_data[j,] ~ num +1,
+        TRUE ~ num
+        ))
+    }
+}
+
 
 ```
 
