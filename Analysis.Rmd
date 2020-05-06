@@ -11,12 +11,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(data.table)
+library(dplyr)
+library(ggplot2)
 library(sf)
 library(sp)
 library(raster)
 library(dplyr)
 library(rgdal)
 library(rgeos)
+library(readr)
 #investigate ArcMap: library(arcmap)
 
 landuse_filtered <- data.table::fread("data/derived/Export_Output.txt")
@@ -133,7 +136,37 @@ df2 <- df2 %>%
 #   rType = "FLT4S")
 ```  
 
+Some sanity checks of the data
+```{r}
+final_counts <- read_csv("final_counts_fixed.csv") %>% 
+  mutate(miles = num*0.0000003861, landcover = case_when(
+    is.na(landcover) ~ "NA",
+    TRUE ~ landcover)
+  )
 
+nas <- final_counts %>% 
+  filter(id == 0)
+
+#get total area excluding nas
+(sum(final_counts$miles) - nas$miles)
+#area of seven county area 2976.97, as compared to this calculation of 2889.938
+#however, census data from 2000, so is likely somewhat out-of-date
+
+water <- final_counts %>% 
+  filter(landcover %in% c("Lakes/Ponds", "River"))
+
+sum(water$miles)
+#204.9 m2 as opposed to expected 165.98 from census
+
+final_counts$landcover <- factor(final_counts$landcover, levels = rev(c("NA", "Grass/Shrub", "Bare Soil", "Buildings", "Roads/Paved Surfaces", "Lakes/Ponds", "Deciduous Tree Canopy", "Coniferous Tree Canopy", "Agriculture", "Emergent Wetland", "Forested/Shrub Wetland", "River", "Extraction")))
+
+ggplot(final_counts, aes(x = landcover, y = miles, fill = landcover)) + geom_col() + 
+  coord_flip() +
+  labs(x = NULL, y = "Square Miles", title = "Areas of land cover types from Raster") +
+  theme_minimal(base_size = 14)+
+  theme(legend.position = "none") +
+  scale_fill_manual(values = rev(c("#000000", "#baed67", "#800000", "#ff0000", "#868686", "#456def", "#40bf00", "#1f8a1f", "#ffc124", "#63b4d5", "#bad8ec", "#009cff", "#a01ff1")))
+```
 
 
 

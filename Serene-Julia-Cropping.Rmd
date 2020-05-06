@@ -654,4 +654,13 @@ write.csv(final_counts, file = "final_counts.csv")
 ```
 
 
+```{r}
+#re-assign landcover categories to account for NA
+final <- read_csv("final_counts.csv") %>% 
+  mutate(landcover = lead(landcover), id = case_when(
+    id == 12~ 0,
+    TRUE ~lead(id)))
+
+write.csv(final, file = "final_counts_fixed.csv")
+```
 
