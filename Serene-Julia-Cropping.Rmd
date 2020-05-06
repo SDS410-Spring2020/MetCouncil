@@ -5,6 +5,7 @@ date: "April 23, 2020"
 output: html_document
 ---
 
+Loading packages
 ```{r}
 library(data.table)
 library(stats)
@@ -14,10 +15,21 @@ library(raster)
 library(dplyr)
 library(rgdal)
 library(rgeos)
+```
 
-# extent(landcover)
+Reading in Raster File and Creating Crop Windows
+```{r}
+
+#load the land cover file once you have it in your data/ folder
+landcover <- raster::raster()
+
+# get bounds of raster file
+plot(landcover)
+extent(landcover)
+
+#Documentation: testing a random small crop window
+
 # e <- as(extent(460000, 465000, 4980000, 4990000), 'SpatialPolygons')
-# 
 # crs(landcover)
 # crs(e) <- "+proj=utm +zone=15 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
 # crs(e)
@@ -26,21 +38,22 @@ library(rgeos)
 
 xmax <- 521239.5
 ymax <- 5029162
-xrange <-  521239.5 - 419971.5 
-yrange <- 5029162 -  4924218
-firsty <- yrange/2
 
-xcroprange <- 5000
-ycroprange <- 4990000 - 4980000
-yincrement <- yrange/3
-xincrement <- xrange/10
+#length of x and y axes - used to make tile bounds
+xlength <-  521239.5 - 419971.5 
+ylength <- 5029162 -  4924218
 
-e <- as(extent(460000, 465000, 4980000, 4990000), 'SpatialPolygons')
+#creating x and y axes increments for making tile bounds
+# y axis split into thirds, x axes split into tenths; 30 tiles total
+yincrement <- ylength/3
+xincrement <- xlength/10
 
+#y crop bounds
 y1 <- c(4924218, 4924218+yincrement)
 y2 <- c(4924218+yincrement, 4924218+2*yincrement)
 y3 <- c(4924218+2*yincrement, 5029162)
 
+#x crop bounds
 x1 <- c(xmax - xincrement, xmax)
 x2 <- c(xmax - 2*xincrement, xmax - xincrement)
 x3 <- c(xmax - 3*xincrement, xmax - 2*xincrement)
@@ -53,7 +66,7 @@ x9 <- c(xmax - 9*xincrement, xmax - 8*xincrement)
 x10 <- c(xmax - 10*xincrement, xmax - 9*xincrement)
 
 #we want to split x into 10 and y into 3 fto obtain 30 blocks total
-#xmin, xmax, ymin, ymax
+#format is : xmin, xmax, ymin, ymax. shortened into (xrange, yrange with premade objects above)
 
 crop1 <- as(extent(x1,y1), 'SpatialPolygons')
 crop2 <- as(extent(x2,y1), 'SpatialPolygons')
@@ -89,27 +102,27 @@ crop30 <- as(extent(x10,y3), 'SpatialPolygons')
 ```
 
 
-
+Increasing memory limit to deal with raster conversion
 ```{r}
+memory.limit(size = 100000000000000000000)
+memory.size(max = NA)
+```
 
-#actually cropping the dataframe with the bounds created above
 
-
+Cropping the raster dataframes ("land") with the bounds created above ("crop")
+```{r}
 land1 <- raster::crop(landcover,crop1)
 land2 <- raster::crop(landcover,crop2)
 land3 <- raster::crop(landcover,crop3)
 land4 <- raster::crop(landcover,crop4)
-
 land5 <- raster::crop(landcover,crop5)
 land6 <- raster::crop(landcover,crop6)
-
 land7 <- raster::crop(landcover,crop7)
 land8 <- raster::crop(landcover,crop8)
 land9 <- raster::crop(landcover,crop9)
 land10 <- raster::crop(landcover,crop10)
 land11 <- raster::crop(landcover,crop11)
 land12 <- raster::crop(landcover,crop12)
-
 land13 <- raster::crop(landcover,crop13)
 land14 <- raster::crop(landcover,crop14)
 land15 <- raster::crop(landcover,crop15)
@@ -120,13 +133,9 @@ land19 <- raster::crop(landcover,crop19)
 land20 <- raster::crop(landcover,crop20)
 land21 <- raster::crop(landcover,crop21)
 land22 <- raster::crop(landcover,crop22)
-
 land23 <- raster::crop(landcover,crop23)
 land24 <- raster::crop(landcover,crop24)
 land25 <- raster::crop(landcover,crop25)
-```
-
-```{r}
 land26 <- raster::crop(landcover,crop26)
 land27 <- raster::crop(landcover,crop27)
 land28 <- raster::crop(landcover,crop28)
@@ -135,11 +144,10 @@ land30 <- raster::crop(landcover,crop30)
 
 ```
 
+Code for saving the Raster-as-dataframes (all at once) : Over 230 GB worth of files
 ```{r}
 
 tile1 <- raster::as.data.frame(land1, xy = TRUE)
-remove(land1)
-remove(data)
 tile2 <- raster::as.data.frame(land2, xy = TRUE)
 tile3 <- raster::as.data.frame(land3, xy = TRUE)
 tile4 <- raster::as.data.frame(land4, xy = TRUE)
@@ -170,18 +178,10 @@ tile28 <- raster::as.data.frame(land28, xy = TRUE)
 tile29 <- raster::as.data.frame(land29, xy = TRUE)
 tile30 <- raster::as.data.frame(land30, xy = TRUE)
 
-
-memory.limit(size = 100000000)
-memory.size(max = NA)
-
-
 ```
 
-
+Code for saving the Raster-as-dataframes (one at a time): Over 230 GB worth of files
 ```{r}
-
-#let's try this again
-
 land1 <- raster::raster("land1.tif", RAT = TRUE)
 tile1 <- raster::as.data.frame(land1, xy = TRUE)
 remove(land1)
@@ -205,9 +205,6 @@ tile4 <- raster::as.data.frame(land4, xy = TRUE)
 remove(land4)
 fwrite(tile4, "tile4.txt")
 remove(tile4)
-```
-
-```{r}
 
 land5 <- raster::raster("land5.tif", RAT = TRUE)
 tile5 <- raster::as.data.frame(land5, xy = TRUE)
@@ -226,9 +223,6 @@ tile7 <- raster::as.data.frame(land7, xy = TRUE)
 remove(land7)
 fwrite(tile7, "tile7.txt")
 remove(tile7)
-```
-
-```{r}
 
 land8 <- raster::raster("land8.tif", RAT = TRUE)
 tile8 <- raster::as.data.frame(land8, xy = TRUE)
@@ -242,9 +236,6 @@ remove(land9)
 fwrite(tile9, "tile9.txt")
 remove(tile9)
 
-```
-
-```{r}
 land10 <- raster::raster("land10.tif", RAT = TRUE)
 tile10 <- raster::as.data.frame(land10, xy = TRUE)
 remove(land10)
@@ -312,7 +303,6 @@ remove(land20)
 fwrite(tile20, "tile20.txt")
 remove(tile20)
 
-
 land21 <- raster::raster("land21.tif", RAT = TRUE)
 tile21 <- raster::as.data.frame(land21, xy = TRUE)
 remove(land21)
@@ -324,7 +314,6 @@ tile22 <- raster::as.data.frame(land22, xy = TRUE)
 remove(land22)
 fwrite(tile22, "tile22.txt")
 remove(tile22)
-
 
 land23 <- raster::raster("land23.tif", RAT = TRUE)
 tile23 <- raster::as.data.frame(land23, xy = TRUE)
@@ -375,11 +364,9 @@ remove(land30)
 fwrite(tile30, "tile30.txt")
 remove(tile30)
 
-
-
 ```
 
-If you need to load in the raster files.
+Run this chunk if you need to load in the raster files.
 ```{r} 
 land1 <- raster::raster("land1.tif", RAT = TRUE)
 land2 <- raster::raster("land2.tif", RAT = TRUE)
@@ -411,105 +398,10 @@ land27 <- raster::raster("land27.tif", RAT = TRUE)
 land28 <- raster::raster("land28.tif", RAT = TRUE)
 land29 <- raster::raster("land29.tif", RAT = TRUE)
 land30 <- raster::raster("land30.tif", RAT = TRUE)
-
-
 ```
 
 
-Comments on merging 30 dataframes and calculating the percentages for each region:
-```{r}
-tile1 <- fread("E:/tiles/tile1.txt", drop = c(1:2))
-tile2 <- fread("E:/tiles/tile2.txt", drop = c(1:2))
-tile3 <- fread("E:/tiles/tile3.txt", drop = c(1:2))
-tile4 <- fread("E:/tiles/tile4.txt", drop = c(1:2))
-tile5 <- fread("E:/tiles/tile5.txt", drop = c(1:2))
-tile6 <- fread("E:/tiles/tile6.txt", drop = c(1:2))
-tile7 <- fread("E:/tiles/tile7.txt", drop = c(1:2))
-tile8 <- fread("E:/tiles/tile8.txt", drop = c(1:2))
-tile9 <- fread("E:/tiles/tile9.txt", drop = c(1:2))
-tile10 <- fread("E:/tiles/tile10.txt", drop = c(1:2))
-tile11 <- fread("E:/tiles/tile11.txt", drop = c(1:2))
-tile12 <- fread("E:/tiles/tile12.txt", drop = c(1:2))
-tile13 <- fread("E:/tiles/tile13.txt", drop = c(1:2))
-tile14 <- fread("E:/tiles/tile14.txt", drop = c(1:2))
-tile15 <- fread("E:/tiles/tile15.txt", drop = c(1:2))
-tile16 <- fread("E:/tiles/tile16.txt", drop = c(1:2))
-tile17 <- fread("E:/tiles/tile17.txt", drop = c(1:2))
-tile18 <- fread("E:/tiles/tile18.txt", drop = c(1:2))
-tile19 <- fread("E:/tiles/tile19.txt", drop = c(1:2))
-tile20 <- fread("E:/tiles/tile20.txt", drop = c(1:2))
-tile21 <- fread("E:/tiles/tile21.txt", drop = c(1:2))
-tile22 <- fread("E:/tiles/tile22.txt", drop = c(1:2))
-tile23 <- fread("E:/tiles/tile23.txt", drop = c(1:2))
-tile24 <- fread("E:/tiles/tile24.txt", drop = c(1:2))
-tile25 <- fread("E:/tiles/tile25.txt", drop = c(1:2))
-tile26 <- fread("E:/tiles/tile26.txt", drop = c(1:2))
-tile27 <- fread("E:/tiles/tile27.txt", drop = c(1:2))
-tile28 <- fread("E:/tiles/tile28.txt", drop = c(1:2))
-tile29 <- fread("E:/tiles/tile29.txt", drop = c(1:2))
-tile30 <- fread("E:/tiles/tile30.txt", drop = c(1:2))
-
-
-
-memory.limit(size = 100000000000000000000)
-memory.size(max = NA)
-```
-
-
-```{r}
-#Combinedtiles_1
-head(tile1)
-head(tile2)
-
-remove(tile15,tile14,tile13,tile12,tile11,tile10,tile9,tile8,tile7,tile6)
-#Combinedtiles_1
-Combinedtiles_1 <- rbind(tile1, tile2, tile3, tile4, tile5, fill = TRUE)
-
-Combinedtiles_1 %>%
-          select(tcma_lc_finalv1)Combinedtiles_1 %>%
-  group_by("tcma_lc_finalv1") %>%
-  summarize(count = n())Combinedtiles_1 %>%
-  mutate(totalCount = sum(count),
-         Percent = count/totalCount)#Combinedtiles_2
-Combinedtiles_2 <- rbind(tile6, tile7, tile8, tile9, tile10)Combinedtiles_2 %>%
-          select(tcma_lc_finalv1)Combinedtiles_2 %>%
-  group_by("tcma_lc_finalv1") %>%
-  summarize(count = n())Combinedtiles_2 %>%
-  mutate(totalCount = sum(count),
-         Percent = count/totalCount)#Combinedtiles_3
-Combinedtiles_3 <- rbind(tile11, tile12, tile13, tile14, tile15)Combinedtiles_3 %>%
-          select(tcma_lc_finalv1)Combinedtiles_3 %>%
-  group_by("tcma_lc_finalv1") %>%
-  summarize(count = n())Combinedtiles_3 %>%
-  mutate(totalCount = sum(count),
-         Percent = count/totalCount)#Combinedtiles_4
-Combinedtiles_4 <- rbind(tile16, tile17, tile18, tile19, tile20)Combinedtiles_4 %>%
-          select(tcma_lc_finalv1)Combinedtiles_4 %>%
-  group_by("tcma_lc_finalv1") %>%
-  summarize(count = n())Combinedtiles_4 %>%
-  mutate(totalCount = sum(count),
-         Percent = count/totalCount)#Combinedtiles_5
-Combinedtiles_5 <- rbind(tile21, tile22, tile23, tile24, tile25)Combinedtiles_5 %>%
-          select(tcma_lc_finalv1)Combinedtiles_5 %>%
-  group_by("tcma_lc_finalv1") %>%
-  summarize(count = n())Combinedtiles_5 %>%
-  mutate(totalCount = sum(count),
-         Percent = count/totalCount)#Combinedtiles_6
-Combinedtiles_6 <- rbind(tile26, tile27, tile28, tile29, tile30)Combinedtiles_6 %>%
-          select(tcma_lc_finalv1)Combinedtiles_6 %>%
-  group_by("tcma_lc_finalv1") %>%
-  summarize(count = n())Combinedtiles_6 %>%
-  mutate(totalCount = sum(count),
-         Percent = count/totalCount)#Combinedtiles_final
-Combinedtiles_final <- rbind(Combinedtiles_1, Combinedtiles_2, Combinedtiles_3, Combinedtiles_4, Combinedtiles_5, Combinedtiles_6)
-```
-
-
-
-
-
-
-Comments on merging 30 dataframes and calculating the percentages for each region:
+Julia's chunk for reading in tiles from local data drive.
 ```{r}
 library(data.table)
 tile1 <- fread("E:/tiles/tile1.txt", drop = c(1:2))
@@ -543,14 +435,10 @@ tile28 <- fread("E:/tiles/tile28.txt", drop = c(1:2))
 tile29 <- fread("E:/tiles/tile29.txt", drop = c(1:2))
 tile30 <- fread("E:/tiles/tile30.txt", drop = c(1:2))
 
-
-memory.limit(size = 10000000000)
-memory.size(max = NA)
 ```
 
-The Active Chunk
-Essential info is at the top of the chunk
 
+Examining Raster-as-dataframe tile
 ```{r}
 head(tile1)
 #    a
@@ -560,8 +448,6 @@ head(tile1)
 # 4: 8
 # 5: 8
 # 6: 8
-
-
 unique(tile1$a)
 class(tile1$a)
 # 
@@ -569,53 +455,20 @@ class(tile1$a)
 #  [1]  8  6  1  4  7 11  0  3  9 10  5  2 12
 # > class(tile1$a)
 # [1] "integer"
-
-
-#rename tile dataframes so that they all have the same col name for rbind
-tile1 <- tile1 %>% rename(a = land1)
-tile2 <- tile2 %>% rename(a = land2)
-tile3 <- tile3 %>% rename(a = land3)
-tile4 <- tile4 %>% rename(a = land4)
-tile5 <- tile5 %>% rename(a = land5)
-tile6 <- tile1 %>% rename(a = land6)
-tile7 <- tile2 %>% rename(a = land7)
-tile8 <- tile3 %>% rename(a = land8)
-tile9 <- tile4 %>% rename(a = land9)
-tile10 <- tile5 %>% rename(a = land10)
-tile11 <- tile1 %>% rename(a = land11)
-tile12 <- tile2 %>% rename(a = land12)
-tile13 <- tile3 %>% rename(a = land13)
-tile14 <- tile4 %>% rename(a = land14)
-tile15 <- tile5 %>% rename(a = land15)
-tile16 <- tile1 %>% rename(a = land16)
-tile17 <- tile2 %>% rename(a = land17)
-tile18 <- tile3 %>% rename(a = land18)
-tile19 <- tile4 %>% rename(a = land19)
-tile20 <- tile5 %>% rename(a = land20)
-tile21 <- tile1 %>% rename(a = land21)
-tile22 <- tile2 %>% rename(a = land22)
-tile23 <- tile3 %>% rename(a = land23)
-tile24 <- tile4 %>% rename(a = land24)
-tile25 <- tile5 %>% rename(a = land25)
-tile26 <- tile1 %>% rename(a = land26)
-tile27 <- tile2 %>% rename(a = land27)
-tile28 <- tile3 %>% rename(a = land28)
-tile29 <- tile4 %>% rename(a = land29)
-tile30 <- tile5 %>% rename(a = land30)
 ```
 
 
-df <- tile1 %>%
-  group_by(a) %>%
-  summarize(count = n())
+Increase Memory Limit Again if Needed to Run Loop
+```{r}
+memory.limit(size = 100000000000000000000)
+memory.size(max = NA)
+```
 
-#tile1 total = 354252587
-total <- sum(df$count)
-total <- sum(final_data$num)
-#it matches!
- 
 
-#Count tabulation function
+Rough Draft of Regional Land Cover Counts Table - Documentation
+```{r}
+
+#Count tabulation function draft
 
 #loop with if statement
 # load tile i
@@ -627,10 +480,6 @@ total <- sum(final_data$num)
 #length of loop : 30
 #:length of table A is : 12
 
-Working Loop
-```{r}
-memory.limit(size = 10000000000)
-memory.size(max = NA)
 
 #intialize structures for the loop
 listfiles <- Sys.glob(file.path("E:/tiles/", "*.txt"))
@@ -652,7 +501,19 @@ for (i in 1:30){
 # loop: load next tile i
 }
 
-
+#Alternative Loop Option (Not Used)
+# 
+# final_data <- data.frame(var = c(0:12), num = c(0,0,0,0,0,0,0,0,0,0,0,0,0))
+# 
+# for (i in 1:30){  new_data <- fread(listfiles[i])
+#   for(j in 1:nrow(new_data)){
+#     final_data <- final_data %>% 
+#       mutate(num = case_when(
+#         var == new_data[j,] ~ num +1,
+#         TRUE ~ num
+#         ))
+#     }
+#}
 
 
 final_data
@@ -677,62 +538,120 @@ total <- sum(final_data$num)
 # [1] 20539736663
 ```
 
+
+Final Loop and Regional Land Cover Counts Table Generation
 ```{r}
-
-
-memory.limit(size = 10000000000)
+#clear memory and increase memory size again
+memory.limit(size = 1000000000000000000)
 memory.size(max = NA)
+gc()
 
-#Jessica's code
-listfiles <- Sys.glob(file.path("E:/tiles/", "*.txt"))
-final_data <- data.frame(var = c(0:12), num = c(0,0,0,0,0,0,0,0,0,0,0,0,0))
-
+#Reload essential packages
 library(stats)
 library(dplyr)
 library(data.table)
 
+#Initialize list of files and empty data tables to record counts by land cover classification for r
+listfiles <- Sys.glob(file.path("E:/tiles/", "*.txt"))
+final_data <- data.frame(var = c(0:12), num = c(0,0,0,0,0,0,0,0,0,0,0,0,0))
+final_data2 <- data.frame(var = c(0:12), num = c(0,0,0,0,0,0,0,0,0,0,0,0,0))
+final_data3 <- data.frame(var = c(0:12), num = c(0,0,0,0,0,0,0,0,0,0,0,0,0))
+
+#Loop Used to Create final_counts.csv
+# Default form below, but Julia had to alter it 3 times through three tables initialized above: final_data, final_data2, final_data3
+
 for (i in 1:30){
   #load in tile i
-  new_data <- fread(listfiles[i]) %>%
+  new_data <- fread(listfiles[i], drop = (1:2)) %>%
   #fix colnames
-  setNames(c("x", "y", "a")) 
+  setNames(c("a")) 
   new_data$a <- factor(new_data$a, levels= 1:12)
   # summarize and count categories for tile i
   new_data <- new_data %>%
   count(a, .drop = FALSE) 
   # add these counts to table A: categories 0-12
-  final_data$num <- final_data$num + new_data$n
+  final_data$num <- final_data3$num + new_data$n
   # delete tile i
   #remove(new_data)
 # loop: load next tile i
 }
 
-final_data <- data.frame(var = c(0:12), num = c(0,0,0,0,0,0,0,0,0,0,0,0,0))
+#Single Tile Count Table Generation (used when the loop stopped at Iteration 29)
+new_data <- tile30 %>% setNames(c("a"))
+new_data$a <-  factor(new_data$a, levels= 1:12)
+  # summarize and count categories for tile i
+ new_data <- new_data %>%
+  count(a, .drop = FALSE)
+  # add these counts to table A: categories 0-12
+  final_data3$num <- final_data3$num + new_data$n
 
-for (i in 1:30){  new_data <- fread(listfiles[i])
-  for(j in 1:nrow(new_data)){
-    final_data <- final_data %>% 
-      mutate(num = case_when(
-        var == new_data[j,] ~ num +1,
-        TRUE ~ num
-        ))
-    }
-}
+  
+#final_data: 1-21 
+total1 <- sum(final_data$num)
+total1/354262714
+#20.99
+#21 iterations in final_data
+  
+#final_data2: 21-29
+total2 <- sum(final_data2$num)
+total2/354262714
+#7.99
+#8 iterations in final_data2
+
+#final_data2: 30
+total3 <- sum(final_data3$num)
+total3/354262714
+#1
+#1 final iteration in final_data3
+
+total <- total1 + total2 + total3
+total
+#10627479119
+
+#theoretical total:
+#1 tile's amount of rows * 30 tiles
+354262714*30
+#10627881420
+
+#match!
+(10627881420-10627479119)/10627479119 *100
+# almost complete match ... .3% difference
+
+final_counts <- final_data + final_data2 + final_data3
+final_counts$var <- final_counts$var/3
+#check
+sum(final_counts$num)
+#10627479119
 
 
-#Calculating the percentage
-final_data <- final_data %>%
-  mutate(Percent = (num/total)*100)
+#Making final table
+final_counts <- final_counts %>%
+  mutate(percent = (num/total)*100) %>%
+  rename(id = var) %>% 
+  arrange(id) %>%
+  mutate(landcover = c("NA", "Grass/Shrub", "Bare Soil", "Buildings", "Roads/Paved Surfaces", "Lakes/Ponds", "Deciduous Tree Canopy", "Coniferous Tree Canopy", "Agriculture", "Emergent Wetland", "Forested/Shrub Wetland", "River", "Extraction"))
+
+
+#Generate final Regional counts csv
+write.csv(final_counts, file = "final_counts.csv")
+
+
+#Reference: Landcover classification legend
+# "O": "NA"
+#“1” = “Grass/Shrub”,
+# “2” = “Bare Soil”,
+# “3” = “Buildings”,
+# “4” = “Roads/Paved Surfaces”,
+# “5” = “Lakes/Ponds”,
+# “6” = “Deciduous Tree Canopy”,
+# “7” = “Coniferous Tree Canopy”,
+# “8” = “Agriculture”,
+# “9” = “Emergent Wetland”,
+# “10” = “Forested/Shrub Wetland”,
+# “11” = “River”,
+# “12” = “Extraction”
 
 ```
-
-
-
-
-
-
-
-
 
 
 
