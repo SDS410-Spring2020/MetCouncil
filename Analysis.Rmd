@@ -148,6 +148,7 @@ nas <- final_counts %>%
   filter(id == 0)
 
 #get total area excluding nas
+(sum(final_counts$num) - nas$num)
 (sum(final_counts$miles) - nas$miles)
 #area of seven county area 2976.97, as compared to this calculation of 2889.938
 #however, census data from 2000, so is likely somewhat out-of-date
@@ -168,10 +169,70 @@ ggplot(final_counts, aes(x = landcover, y = miles, fill = landcover)) + geom_col
   scale_fill_manual(values = rev(c("#000000", "#baed67", "#800000", "#ff0000", "#868686", "#456def", "#40bf00", "#1f8a1f", "#ffc124", "#63b4d5", "#bad8ec", "#009cff", "#a01ff1")))
 ```
 
+```{r}
+trees <- final_counts %>% 
+  filter(landcover %in% c("Deciduous Tree Canopy", "Coniferous Tree Canopy"))
+
+tree_total <- sum(trees$num)
+sum(trees$miles)
+tree_total
+```
 
 
 ```{r}
-#Flowchart Step 6: Estimate percent forested areas within green land use filtered in Step 2
+landuse_percentages <- landuse_filtered %>% 
+  rename(type = DSCRPT2016, `NA` = VALUE_0, `Grass/Shrub` = VALUE_1, `Bare Soil` = VALUE_2, Buildings= VALUE_3, `Roads/Paved Surfaces` = VALUE_4, `Lakes/Ponds` = VALUE_5, `Deciduous Tree Canopy` = VALUE_6, `Coniferous Tree Canopy` = VALUE_7, Agriculture = VALUE_8, `Emergent Wetland` = VALUE_9, `Forested/Shrub Wetland` = VALUE_10, River = VALUE_11, Extraction = VALUE_12) %>% 
+  melt(id.vars = c("type", "OBJECTID")) %>% 
+  mutate(percent = case_when(
+    type == "Park, Recreational, or Preserve" ~ (value/747410768)*100,
+    type == "Undeveloped" ~ (value/1702916156)*100
+  ))
+
+tree_percentages <- data.frame(landuse = factor(c("All", "All", "Park, Recreational, or Preserve", "Park, Recreational, or Preserve", "Undeveloped", "Undeveloped", "Other", "Other"), levels = c("All", "Park, Recreational, or Preserve", "Undeveloped", "Other")),
+                               type = c("Deciduous Tree Canopy", "Coniferous Tree Canopy", "Deciduous Tree Canopy", "Coniferous Tree Canopy", "Deciduous Tree Canopy", "Coniferous Tree Canopy", "Deciduous Tree Canopy", "Coniferous Tree Canopy"),
+                               area = c(filter(trees, id==6)$num,
+                                        filter(trees, id==7)$num,
+                                        filter(landuse_filtered, OBJECTID ==2)$VALUE_6,
+                                        filter(landuse_filtered, OBJECTID ==2)$VALUE_7,
+                                        filter(landuse_filtered, OBJECTID ==1)$VALUE_6,
+                                        filter(landuse_filtered, OBJECTID ==1)$VALUE_7,
+                                        filter(trees, id==6)$num-sum(filter(landuse_filtered, OBJECTID ==2)$VALUE_6, filter(landuse_filtered, OBJECTID ==1)$VALUE_6),
+                                        filter(trees, id==7)$num-sum(filter(landuse_filtered, OBJECTID ==2)$VALUE_7, filter(landuse_filtered, OBJECTID ==1)$VALUE_7))) %>% 
+  mutate(percent = area/1744113936*100)
 
 
+
+tree_percentages %>% 
+  filter(landuse != "All") %>% 
+  ggplot(aes(x=landuse, y=percent, fill=type)) + geom_bar(stat="identity")+
+  scale_fill_manual(values = c("#1f8a1f", "#40bf00"), labels = c("Coniferous", "Deciduous"))+
+  labs(x="Land Use Type", y="Percent of Region's Trees", fill = NULL, title = "Percent of Trees in Respective Land Use Categories") +
+  scale_x_discrete(labels = c('Park, Recreational,\nor Preserve','Undeveloped','Other')) +
+  theme_minimal(base_size = 13)
+
+
+```
+
+
+```{r}
+
+sequestration <- data.frame(landuse = c("All", "Park, Recreational, or Preserve", "Undeveloped", "Other"),
+                            tree_area = c(sum(trees$num), 
+                                          sum(filter(landuse_percentages, OBJECTID == 2 & variable %in% c("Deciduous Tree Canopy", "Coniferous Tree Canopy"))$value),
+                                          sum(filter(landuse_percentages, OBJECTID == 1 & variable %in% c("Deciduous Tree Canopy", "Coniferous Tree Canopy"))$value),
+                                          sum(trees$num)-sum(filter(landuse_percentages, OBJECTID == 2 & variable %in% c("Deciduous Tree Canopy", "Coniferous Tree Canopy"))$value,filter(landuse_percentages, OBJECTID == 1 & variable %in% c("Deciduous Tree Canopy", "Coniferous Tree Canopy"))$value))) %>% 
+  mutate(percent = tree_area/1744113936,
+         storage = tree_area * 4.41, 
+         storage_se = tree_area*0.74, 
+         gross_sequestration = tree_area*.157, 
+         gross_sequestration_se = tree_area*0.023, 
+         net_sequestration = tree_area*0.081, 
+         net_sequestration_se = 0.045)
+
+
+
+sequestration %>% 
+  filter(landuse != "All") %>% 
+  mutate(percent = tree_area/1744113936*100) %>% 
+  ggplot(aes(x = landuse, y=percent, fill = percent)) + geom_bar(stat = "identity")
 ```
