@@ -200,7 +200,9 @@ tree_percentages <- data.frame(landuse = factor(c("All", "All", "Park, Recreatio
                                         filter(trees, id==7)$num-sum(filter(landuse_filtered, OBJECTID ==2)$VALUE_7, filter(landuse_filtered, OBJECTID ==1)$VALUE_7))) %>% 
   mutate(percent = area/1744113936*100)
 
-
+total_area <- landuse_percentages %>% 
+  group_by(type) %>% 
+  summarize(sum(value))
 
 tree_percentages %>% 
   filter(landuse != "All") %>% 
