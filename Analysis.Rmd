@@ -13,152 +13,37 @@ knitr::opts_chunk$set(echo = TRUE)
 library(data.table)
 library(dplyr)
 library(ggplot2)
-library(sf)
-library(sp)
-library(raster)
-library(dplyr)
-library(rgdal)
-library(rgeos)
-library(readr)
-#investigate ArcMap: library(arcmap)
 
 landuse_filtered <- data.table::fread("data/derived/Export_Output.txt")
-landuse <- read_sf(dsn = "data/source", layer = "GeneralizedLandUse2016")
-landcover <- raster::raster("data/source/landcover/tcma_lc_finalv1.tif", RAT = TRUE) #Julias load
-#landcover <- raster::raster("/Users/serenelee/Capstone/TCMA_ClassNames_Updated/tcma_lc_finalv1.tif")#Serene
-#12 columns would be landcover
 
-plot(landcover, axes = TRUE)
-
-options(stringsAsFactors=FALSE)
-
-#filtering the raster while still in raster format
-#R package for Arcmap that can filter raster?
-class(landcover@data)
-data <- landcover@data
-
-
-#Jessica might try on desktop computer to directly get dataframe:
-#rasterdata <- raster::as.data.frame(landcover)
-
-
-#trying to crop file
-#somethingtocheck bounds(landcover)
-#(xmin, xmax, ymin, ymax)
-#490,000... 520,000,...521,000
-extent(landcover)
-e <- as(extent(460000, 465000, 4980000, 4990000), 'SpatialPolygons')
-crs(landcover)
-crs(e) <- "+proj=utm +zone=15 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
-crs(e)
-cropped2 <- raster::crop(landcover,e)
-plot(cropped2, axes = TRUE)
-
-## transforming to dataframe
-#df <- raster::rasterToPoints(cropped2)
-#df <- as.data.frame(df)
-
-#transforming to dataframe directly
-df2 <- raster::as.data.frame(cropped2, xy = TRUE)
-
-#checking that the third column values are 1-11
-min(df2$tcma_lc_finalv1)
-max(df2$tcma_lc_finalv1)
-
-# df2 <- df2 %>%
-#   dplyr::rename(classid = tcma_lc_finalv1) %>%
-#   mutate(classname = 0)
-#   ifelse()
-
-df2$tcma_lc_finalv1 <- as.character(df2$tcma_lc_finalv1)
-
-df2 <- df2 %>%
-  mutate(Type = recode(tcma_lc_finalv1,
-                       "1" = "Grass/Shrub",
-                       "2" = "Bare Soil",
-                       "3" = "Buildings",
-                       "4" = "Roads/Paved Surfaces",
-                       "5" = "Lakes/Ponds",
-                       "6" = "Deciduous Tree Canopy",
-                       "7" = "Coniferous Tree Canopy",
-                       "8" = "Agriculture",
-                       "9" = "Emergent Wetland",
-                       "10" = "Forested/Shrub Wetland",
-                       "11" = "River",
-                       "12" = "Extraction"))
-
-df2 <- df2 %>%
-  rename(TypeId = tcma_lc_finalv1)
-
-# step5: x/y to find acreage
-# x = 
-# y = 
-# 
-# #Flowchart Step 5: Estimate percent forested areas within green areas filtered in Step 2
-# 
-# landuse <- as.data.frame(landuse)
-# x <- unique(landuse$LUSE_DESC)
-# x
-
-#landuse <- landuse %>%
- # filter(LUSE_DESC == "Park, Recreational, or Preserve" | LUSE_DESC == "Undeveloped") %>%
-  #st_as_sf()
-
-
-#generating intersection in R
-#uses too much memory
-#landcoverp <- raster::rasterToPolygons(cropped2)
-#trying to get compatible formats: landuse <- as.raster(landuse)
-
-#rgeos::gIntersection(cropped2,landuse)
-
-#projection(landuse) <- projection(cropped2)
-
-#intersect <- raster::intersect(landuse, cropped2)
-
-
-
-
-###----------------------------------- not currently in use
-#alternate method
-# library(foreign)
-# rat <- foreign::read.dbf("data/source/landcover/tcma_lc_finalv1.vat.dbf")
-
-# 
-# #trying to split file
-# library(SpaDES)
-# #needs to be edited - will crash computer and fill up C:: drive
-# o <- SpaDES.tools::splitRaster(landcover,
-#   nx = 3,
-#   ny = 3,
-#  # buffer = c(0.5, 0.5),
-#   path = "~data/source/landcover",
-#   rType = "FLT4S")
-```  
-
-Some sanity checks of the data
-```{r}
 final_counts <- read_csv("final_counts_fixed.csv") %>% 
   mutate(miles = num*0.0000003861, landcover = case_when(
     is.na(landcover) ~ "NA",
     TRUE ~ landcover)
   )
+```  
 
+Some sanity checks of the data
+```{r}
+#get total area excluding nas
 nas <- final_counts %>% 
   filter(id == 0)
 
-#get total area excluding nas
 (sum(final_counts$num) - nas$num)
 (sum(final_counts$miles) - nas$miles)
 #area of seven county area 2976.97, as compared to this calculation of 2889.938
 #however, census data from 2000, so is likely somewhat out-of-date
 
+
+#check total water area
 water <- final_counts %>% 
   filter(landcover %in% c("Lakes/Ponds", "River"))
 
 sum(water$miles)
 #204.9 m2 as opposed to expected 165.98 from census
 
+
+#plot areas of land cover types, to compare with raster
 final_counts$landcover <- factor(final_counts$landcover, levels = rev(c("NA", "Grass/Shrub", "Bare Soil", "Buildings", "Roads/Paved Surfaces", "Lakes/Ponds", "Deciduous Tree Canopy", "Coniferous Tree Canopy", "Agriculture", "Emergent Wetland", "Forested/Shrub Wetland", "River", "Extraction")))
 
 ggplot(final_counts, aes(x = landcover, y = miles, fill = landcover)) + geom_col() + 
@@ -170,16 +55,19 @@ ggplot(final_counts, aes(x = landcover, y = miles, fill = landcover)) + geom_col
 ```
 
 ```{r}
+#get just forested land from land cover data
 trees <- final_counts %>% 
   filter(landcover %in% c("Deciduous Tree Canopy", "Coniferous Tree Canopy"))
 
-tree_total <- sum(trees$num)
+#total square meters of forested land
+sum(trees$num)
+#total square miles of forested land
 sum(trees$miles)
-tree_total
 ```
 
 
 ```{r}
+#get percentages of land cover types for parks and undeveloped land
 landuse_percentages <- landuse_filtered %>% 
   rename(type = DSCRPT2016, `NA` = VALUE_0, `Grass/Shrub` = VALUE_1, `Bare Soil` = VALUE_2, Buildings= VALUE_3, `Roads/Paved Surfaces` = VALUE_4, `Lakes/Ponds` = VALUE_5, `Deciduous Tree Canopy` = VALUE_6, `Coniferous Tree Canopy` = VALUE_7, Agriculture = VALUE_8, `Emergent Wetland` = VALUE_9, `Forested/Shrub Wetland` = VALUE_10, River = VALUE_11, Extraction = VALUE_12) %>% 
   melt(id.vars = c("type", "OBJECTID")) %>% 
@@ -188,6 +76,7 @@ landuse_percentages <- landuse_filtered %>%
     type == "Undeveloped" ~ (value/1702916156)*100
   ))
 
+#compile tree area and percent for all, parks, and undeveloped land
 tree_percentages <- data.frame(landuse = factor(c("All", "All", "Park, Recreational, or Preserve", "Park, Recreational, or Preserve", "Undeveloped", "Undeveloped", "Other", "Other"), levels = c("All", "Park, Recreational, or Preserve", "Undeveloped", "Other")),
                                type = c("Deciduous Tree Canopy", "Coniferous Tree Canopy", "Deciduous Tree Canopy", "Coniferous Tree Canopy", "Deciduous Tree Canopy", "Coniferous Tree Canopy", "Deciduous Tree Canopy", "Coniferous Tree Canopy"),
                                area = c(filter(trees, id==6)$num,
@@ -200,6 +89,7 @@ tree_percentages <- data.frame(landuse = factor(c("All", "All", "Park, Recreatio
                                         filter(trees, id==7)$num-sum(filter(landuse_filtered, OBJECTID ==2)$VALUE_7, filter(landuse_filtered, OBJECTID ==1)$VALUE_7))) %>% 
   mutate(percent = area/1744113936*100)
 
+#get total areaa
 total_area <- landuse_percentages %>% 
   group_by(type) %>% 
   summarize(sum(value))
@@ -217,7 +107,7 @@ tree_percentages %>%
 
 
 ```{r}
-
+#get sequestration values for the region
 sequestration <- data.frame(landuse = c("All", "Park, Recreational, or Preserve", "Undeveloped", "Other"),
                             tree_area = c(sum(trees$num), 
                                           sum(filter(landuse_percentages, OBJECTID == 2 & variable %in% c("Deciduous Tree Canopy", "Coniferous Tree Canopy"))$value),
@@ -232,7 +122,7 @@ sequestration <- data.frame(landuse = c("All", "Park, Recreational, or Preserve"
          net_sequestration_se = 0.045)
 
 
-
+#bar chart for report
 sequestration %>% 
   filter(landuse != "All") %>% 
   mutate(percent = tree_area/1744113936*100) %>% 
